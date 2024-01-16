@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Tab, Row, Col, Nav, Button } from 'react-bootstrap';
 import FalconCardBody from './FalconCardBody';
@@ -8,6 +8,7 @@ import Flex from './Flex';
 import { useLocation } from 'react-router-dom';
 import { camelize } from '../../helpers/utils';
 import { useAppContext } from 'Main';
+import axios from 'axios';
 
 const PreviewCode = () => {
   return (
@@ -47,7 +48,25 @@ const FalconComponentCardHeader = ({
   const {
     config: { isRTL }
   } = useAppContext();
-  console.log('log: 🚀  isRTL:', isRTL);
+  // console.log('log: 🚀  isRTL:', isRTL);
+  // console.log('log: 🚀  process.env:', process.env);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(process.env.REACT_APP_API_URL + '/api/productos')
+  //     .then(function (response) {
+  //       // handle success
+  //       console.log('log: 🚀  response.data:', response.data);
+  //     })
+  //     .catch(function (error) {
+  //       // handle error
+  //       console.log(error);
+  //     })
+  //     .finally(function () {
+  //       // always executed
+  //     });
+  // }, []);
+
   return (
     <Card.Header
       className={classNames({ 'bg-body-tertiary': light }, className)}
