@@ -7,7 +7,8 @@ import {
   useSortBy,
   usePagination,
   useRowSelect,
-  useGlobalFilter
+  useGlobalFilter,
+  useFilters
 } from 'react-table';
 
 export const IndeterminateCheckbox = React.forwardRef(
@@ -50,6 +51,12 @@ const AdvanceTableWrapper = ({
   pagination,
   perPage = 10
 }) => {
+  const defaultColumn = React.useMemo(
+    () => ({
+      Filter: ''
+    }),
+    []
+  );
   const {
     getTableProps,
     headers,
@@ -68,9 +75,11 @@ const AdvanceTableWrapper = ({
     {
       columns,
       data,
+      defaultColumn,
       disableSortBy: !sortable,
       initialState: { pageSize: pagination ? perPage : data.length }
     },
+    useFilters,
     useGlobalFilter,
     useSortBy,
     usePagination,

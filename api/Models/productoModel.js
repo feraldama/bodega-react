@@ -26,6 +26,7 @@ const productoModel = sequelize.define(
     ProductoNombre: Sequelize.STRING,
     ProductoPrecioVenta: Sequelize.BIGINT,
     ProductoPrecioUnitario: Sequelize.BIGINT,
+    ProductoPrecioPromedio: Sequelize.BIGINT,
     ProductoStock: Sequelize.MEDIUMINT,
     ProductoStockUnitario: Sequelize.MEDIUMINT,
     ProductoCantidadCaja: Sequelize.MEDIUMINT,

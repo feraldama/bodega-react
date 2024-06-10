@@ -293,8 +293,8 @@ const FalconRoutes = () => {
 
       <Route element={<MainLayout />}>
         {/*Dashboard*/}
-        <Route path="/" element={<AdvanceTableExamples />} />
-        {/* <Route path="dashboard/analytics" element={<Analytics />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="dashboard/analytics" element={<Analytics />} />
         <Route path="dashboard/crm" element={<Crm />} />
         <Route path="dashboard/saas" element={<Saas />} />
         <Route path="dashboard/e-commerce" element={<Ecommerce />} />
@@ -303,7 +303,7 @@ const FalconRoutes = () => {
           path="dashboard/project-management"
           element={<ProjectManagement />}
         />
-        <Route path="dashboard/support-desk" element={<SupportDesk />} /> */}
+        <Route path="dashboard/support-desk" element={<SupportDesk />} />
         {/* E Commerce */}
         <Route
           path="e-commerce/orders/order-details"

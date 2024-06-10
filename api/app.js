@@ -1,13 +1,16 @@
 const express = require("express");
 const Sequelize = require("sequelize");
+require("dotenv").config();
+
 const app = express();
+
 const {
   REACT_APP_DB_USER,
   REACT_APP_DB_PASSWORD,
   REACT_APP_DB_HOST,
   REACT_APP_DB_NAME,
 } = process.env;
-const productoModel = require("./Models/productoModel");
+
 const sequelize = new Sequelize(
   REACT_APP_DB_NAME,
   REACT_APP_DB_USER,
@@ -17,24 +20,6 @@ const sequelize = new Sequelize(
     dialect: "mysql",
   }
 );
-
-// const productoModel = sequelize.define('producto',{
-// 	'ProductoId':{type:Sequelize.INTEGER, primaryKey:true},
-// 	'ProductoCodigo':Sequelize.BIGINT,
-// 	'ProductoNombre': Sequelize.STRING,
-// 	"ProductoPrecioVenta":Sequelize.BIGINT,
-// 	"ProductoPrecioUnitario":Sequelize.BIGINT,
-// 	"ProductoStock":Sequelize.MEDIUMINT,
-// 	"ProductoStockUnitario":Sequelize.MEDIUMINT,
-// 	"ProductoCantidadCaja":Sequelize.MEDIUMINT,
-// 	"ProductoStockMinimo":Sequelize.MEDIUMINT,
-// 	"ProductoPrecioVentaMayorista":Sequelize.BIGINT,
-// 	"ProductoIVA":Sequelize.SMALLINT,
-
-// }, {
-//     tableName: 'producto',
-// 	timestamps: false, // Specify the table name here
-// });
 
 sequelize
   .authenticate()

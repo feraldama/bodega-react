@@ -9,6 +9,7 @@ import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFoot
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 import AdvanceTablePagination from 'components/common/advance-table/AdvanceTablePagination';
 import AdvanceTableWrapper from 'components/common/advance-table/AdvanceTableWrapper';
+import TextSearchFilter from 'components/common/advance-table/TextSearchFilter';
 
 const data = `const columns = [
   {
@@ -445,6 +446,152 @@ function AdvanceTableExample() {
 
 render(<AdvanceTableExample />)`;
 
+const columnSearchCode = `const columns = [
+  {
+    accessor: 'name',
+    Header: 'Name',
+    headerProps: { className: 'text-900' },
+    Filter: TextSearchFilter
+  },
+  {
+    accessor: 'email',
+    Header: 'Email',
+    headerProps: { className: 'text-900' },
+    Filter: TextSearchFilter,
+    Cell: rowData => {
+      const { email } = rowData.row.original
+      return(
+        <a href={'mailto:' + email}>
+          {email}
+        </a>
+      )
+    }
+  },
+  {
+    accessor: 'age',
+    Header: 'Age',
+    Filter: TextSearchFilter,
+    headerProps: { className: 'text-900' },
+    cellProps:{
+      className:'fw-medium'
+    }
+  }
+];
+
+const data = [
+  {
+    name: 'Anna',
+    email: 'anna@example.com',
+    age: 18
+  },
+  {
+    name: 'Homer',
+    email: 'homer@example.com',
+    age: 35
+  },
+  {
+    name: 'Oscar',
+    email: 'oscar@example.com',
+    age: 52
+  },
+  {
+    name: 'Emily',
+    email: 'emily@example.com',
+    age: 30
+  },
+  {
+    name: 'Jara',
+    email: 'jara@example.com',
+    age: 25
+  }
+];
+
+function BulAction({ selectedRowIds }){
+  return (
+    <Row className="flex-between-center mb-3">
+      <Col xs={4} sm="auto" className="d-flex align-items-center pe-0">
+        <h5 className="fs-9 mb-0 text-nowrap py-2 py-xl-0">
+          {
+            Object.keys(selectedRowIds).length > 0 ?
+            'You have selected ' + Object.keys(selectedRowIds).length + ' rows' 
+            :
+            'Selection Example'
+          }
+        </h5>
+      </Col>
+      <Col xs={8} sm="auto" className="ms-auto text-end ps-0">
+        {Object.keys(selectedRowIds).length > 0 ? (
+          <div className="d-flex">
+            <Form.Select size="sm" aria-label="Bulk actions">
+              <option>Bulk Actions</option>
+              <option value="refund">Refund</option>
+              <option value="delete">Delete</option>
+              <option value="archive">Archive</option>
+            </Form.Select>
+            <Button
+              type="button"
+              variant="falcon-default"
+              size="sm"
+              className="ms-2"
+            >
+              Apply
+            </Button>
+          </div>
+          ) : (
+            <div id="orders-actions">
+              <IconButton
+                variant="falcon-default"
+                size="sm"
+                icon="plus"
+                transform="shrink-3"
+                className='me-2'
+              >
+                <span className="d-none d-sm-inline-block ms-1">New</span>
+              </IconButton>
+              <IconButton
+                variant="falcon-default"
+                size="sm"
+                icon="external-link-alt"
+                transform="shrink-3"
+              >
+                <span className="d-none d-sm-inline-block ms-1">Export</span>
+              </IconButton>
+            </div>
+          )}
+      </Col>
+    </Row>
+  );
+};
+
+function AdvanceTableExample() {
+
+  return(
+    <AdvanceTableWrapper
+      columns={columns}
+      data={data}
+      sortable
+      pagination
+      perPage={5}
+      selection
+      selectionColumnWidth={30}
+    >
+      <BulAction table/>
+      <AdvanceTable
+        table
+        headerClassName="bg-200 text-nowrap align-middle"
+        rowClassName="align-middle white-space-nowrap"
+        tableProps={{
+          striped: true,
+          className: 'fs-10 mb-0 overflow-hidden'
+        }}
+      />
+    </AdvanceTableWrapper>
+  )
+}
+
+render(<AdvanceTableExample />)
+`;
+
 const AdvanceTableExamples = () => (
   <>
     <PageHeader
@@ -464,7 +611,80 @@ const AdvanceTableExamples = () => (
       </Button>
     </PageHeader>
 
-    <FalconComponentCard className="mb-0">
+    <FalconComponentCard>
+      <FalconComponentCard.Header title="Example" light={false} />
+      <FalconComponentCard.Body
+        code={exampleCode}
+        scope={{
+          AdvanceTableWrapper,
+          AdvanceTable,
+          AdvanceTableFooter
+        }}
+        language="jsx"
+        noInline
+        noLight
+      />
+    </FalconComponentCard>
+
+    <FalconComponentCard>
+      <FalconComponentCard.Header
+        title="Pagination with numbering"
+        light={false}
+      />
+      <FalconComponentCard.Body
+        code={paginationNumberingCode}
+        scope={{
+          AdvanceTableWrapper,
+          AdvanceTable,
+          AdvanceTablePagination
+        }}
+        language="jsx"
+        noInline
+        noLight
+      />
+    </FalconComponentCard>
+
+    <FalconComponentCard>
+      <FalconComponentCard.Header
+        title="Searchable Table"
+        light={false}
+        className="border-bottom border-200"
+      />
+      <FalconComponentCard.Body
+        code={searchableTableCode}
+        scope={{
+          AdvanceTableWrapper,
+          AdvanceTable,
+          AdvanceTableFooter,
+          AdvanceTableSearchBox
+        }}
+        language="jsx"
+        noInline
+        noLight
+      />
+    </FalconComponentCard>
+
+    <FalconComponentCard>
+      <FalconComponentCard.Header
+        title="Custom Cell"
+        light={false}
+        className="border-bottom border-200"
+      />
+      <FalconComponentCard.Body
+        code={customCellCode}
+        scope={{
+          AdvanceTableWrapper,
+          AdvanceTable,
+          AdvanceTableFooter,
+          AdvanceTableSearchBox
+        }}
+        language="jsx"
+        noInline
+        noLight
+      />
+    </FalconComponentCard>
+
+    <FalconComponentCard className="mb-3">
       <FalconComponentCard.Header
         title="Selection"
         light={false}
@@ -476,6 +696,27 @@ const AdvanceTableExamples = () => (
           AdvanceTableWrapper,
           AdvanceTable,
           AdvanceTableFooter,
+          IconButton
+        }}
+        language="jsx"
+        noInline
+        noLight
+      />
+    </FalconComponentCard>
+
+    <FalconComponentCard className="mb-0">
+      <FalconComponentCard.Header
+        title="Column search"
+        light={false}
+        className="border-bottom border-200"
+      />
+      <FalconComponentCard.Body
+        code={columnSearchCode}
+        scope={{
+          AdvanceTableWrapper,
+          AdvanceTable,
+          AdvanceTableFooter,
+          TextSearchFilter,
           IconButton
         }}
         language="jsx"

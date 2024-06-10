@@ -15,7 +15,7 @@ import product9 from 'assets/img/products/9.jpg';
 
 export const productData = [
   {
-    name: 'AppleEE iPad Air 2019 (3GB RAM, 128GB ROM, 8MP Main Camera)',
+    name: 'Apple iPad Air 2019 (3GB RAM, 128GB ROM, 8MP Main Camera)',
     category: 'Mobile & Tabs',
     id: 'TN000001',
     features: ['3GB RAM', '128GB ROM', 'Apple A12 Bionic (7 nm)', 'iOS 12.1.3'],
