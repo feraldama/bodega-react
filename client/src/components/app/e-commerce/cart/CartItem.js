@@ -7,8 +7,10 @@ import { ProductContext } from 'context/Context';
 import QuantityController from '../QuantityController';
 
 const CartItem = ({ product }) => {
-  const { id, files, name, quantity, totalPrice } = product;
-
+  const { id, files, name, quantity, totalPrice, price } = product;
+  const formattedPrice = new Intl.NumberFormat('es-ES').format(
+    price * quantity
+  );
   const { handleAddToCart } = useProductHook(product);
 
   const { productsDispatch } = useContext(ProductContext);
@@ -38,24 +40,24 @@ const CartItem = ({ product }) => {
 
   return (
     <Row className="gx-card mx-0 align-items-center border-bottom border-200">
-      <Col xs={8} className="py-3">
+      <Col xs={7} className="py-3">
         <div className="d-flex align-items-center">
-          <Link to="/e-commerce/product/product-details">
-            <img
-              src={files[0].src}
-              width="60"
-              alt={name}
-              className="img-fluid rounded-1 me-3 d-none d-md-block"
-            />
-          </Link>
+          {/* <Link to="/e-commerce/product/product-details"> */}
+          <img
+            src={files[0].src}
+            width="60"
+            alt={name}
+            className="img-fluid rounded-1 me-3 d-none d-md-block"
+          />
+          {/* </Link> */}
           <div className="flex-1">
             <h5 className="fs-9">
-              <Link
+              {/* <Link
                 to="/e-commerce/product/product-details"
                 className="text-900"
-              >
-                {name}
-              </Link>
+              > */}
+              {name}
+              {/* </Link> */}
             </h5>
             <div className="fs-11 fs-md-10">
               <Button
@@ -64,13 +66,13 @@ const CartItem = ({ product }) => {
                 className="text-danger fs-11 fs-md-10 fw-normal p-0"
                 onClick={() => handleRemove(id)}
               >
-                Remove
+                Remover
               </Button>
             </div>
           </div>
         </div>
       </Col>
-      <Col xs={4} className="py-3">
+      <Col xs={5} className="py-3">
         <Row className="align-items-center">
           <Col
             md={{ span: 8, order: 0 }}
@@ -92,7 +94,7 @@ const CartItem = ({ product }) => {
             xs={{ order: 0 }}
             className="text-end ps-0 mb-2 mb-md-0 text-600"
           >
-            ${totalPrice}
+            Gs. {formattedPrice}
           </Col>
         </Row>
       </Col>

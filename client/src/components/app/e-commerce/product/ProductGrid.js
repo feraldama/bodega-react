@@ -22,18 +22,30 @@ const ProductGrid = ({ product, ...rest }) => {
     totalReview,
     isInStock,
     isNew,
-    files
+    files,
+    ProductoStock,
+    ProductoStockUnitario
   } = product;
 
+  const formattedPrice = new Intl.NumberFormat('es-ES').format(price);
   const { isInFavouriteItems } = useContext(ProductContext);
 
   const { handleAddToCart, handleFavouriteClick } = useProductHook(product);
+
+  const handleAddToCartAndFocus = () => {
+    handleAddToCart(1, true, true);
+    if (rest.searchInputRef.current) {
+      rest.searchInputRef.current.focus();
+      rest.searchInputRef.current.select();
+    }
+  };
+
   return (
-    <Col className="mb-4" {...rest}>
+    <Col className="mb-4" {...rest} onClick={() => handleAddToCartAndFocus()}>
       <Flex
         direction="column"
         justifyContent="between"
-        className="border rounded-1 h-100 pb-3"
+        className="border rounded-1 h-100"
       >
         <div className="overflow-hidden">
           <ProductImage
@@ -45,12 +57,12 @@ const ProductGrid = ({ product, ...rest }) => {
           />
           <div className="p-3">
             <h5 className="fs-9">
-              <Link
+              {/* <Link
                 className="text-1100"
                 to={`/e-commerce/product/product-details/${id}`}
-              >
-                {name}
-              </Link>
+              > */}
+              {name}
+              {/* </Link> */}
             </h5>
             <p className="fs-10 mb-3">
               <Link to="#!" className="text-500">
@@ -58,26 +70,43 @@ const ProductGrid = ({ product, ...rest }) => {
               </Link>
             </p>
             <h5 className="fs-md-7 text-warning mb-0 d-flex align-items-center mb-3">
-              {`$${salePrice ? salePrice : price}`}
-              {salePrice && <del className="ms-2 fs-10 text-500">${price}</del>}
+              {`Gs. ${salePrice ? salePrice : formattedPrice}`}
+              {salePrice && (
+                <del className="ms-2 fs-10 text-500">Gs. {price}</del>
+              )}
             </h5>
+            {/* <p className="fs-10 mb-1">
+              Shipping Cost: <strong>Gs. {shippingCost}</strong>
+            </p> */}
             <p className="fs-10 mb-1">
-              Shipping Cost: <strong>${shippingCost}</strong>
-            </p>
-            <p className="fs-10 mb-1">
-              Stock:{' '}
+              Stock Caja:{' '}
               <strong
                 className={classNames({
-                  'text-success': isInStock,
-                  'text-danger': !isInStock
+                  'text-success': ProductoStock > 0,
+                  'text-danger': ProductoStock < 1
                 })}
               >
-                {isInStock ? 'Available' : 'Sold-Out'}
+                {ProductoStock > 0 ? ProductoStock : 'Sin Stock'}
               </strong>
             </p>
+            {ProductoStockUnitario > 0 && (
+              <p className="fs-10 mb-1">
+                Stock Unitario:{' '}
+                <strong
+                  className={classNames({
+                    'text-success': ProductoStockUnitario > 0,
+                    'text-danger': ProductoStockUnitario < 1
+                  })}
+                >
+                  {ProductoStockUnitario > 0
+                    ? ProductoStockUnitario
+                    : 'Sin Stock'}
+                </strong>
+              </p>
+            )}
           </div>
         </div>
-        <Flex alignItems="center" className="px-3">
+        {/* <Flex alignItems="center" className="px-3">
           <div className="flex-1">
             <StarRating readonly rating={rating} />
             <span className="ms-1">({totalReview})</span>
@@ -102,18 +131,20 @@ const ProductGrid = ({ product, ...rest }) => {
           <OverlayTrigger
             placement="top"
             overlay={
-              <Tooltip style={{ position: 'fixed' }}>Add to Cart</Tooltip>
+              <Tooltip style={{ position: 'fixed' }}>
+                Agregar al carrito
+              </Tooltip>
             }
           >
             <Button
               variant="falcon-default"
               size="sm"
-              onClick={() => handleAddToCart(1, true, true)}
+              onClick={() => handleAddToCartAndFocus()}
             >
               <FontAwesomeIcon icon="cart-plus" />
             </Button>
           </OverlayTrigger>
-        </Flex>
+        </Flex> */}
       </Flex>
     </Col>
   );

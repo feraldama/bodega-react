@@ -7,7 +7,11 @@ import logo from 'assets/img/illustrations/falcon.png';
 const Logo = ({ at, width, className, textClass, ...rest }) => {
   return (
     <Link
-      to="/"
+      REACT_APP_URL
+      to={
+        process.env.REACT_APP_URL +
+        ':8080/AlonsoBodega/servlet/com.alonso.inicio'
+      }
       className={classNames(
         'text-decoration-none',
         { 'navbar-brand text-left': at === 'navbar-vertical' },

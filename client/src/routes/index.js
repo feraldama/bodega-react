@@ -330,10 +330,7 @@ const FalconRoutes = () => {
           element={<ProductDetails />}
         />
 
-        <Route
-          path="e-commerce/product/:productLayout"
-          element={<Products />}
-        />
+        <Route path="product/:productLayout" element={<Products />} />
 
         <Route path="e-commerce/invoice" element={<Invoice />} />
 

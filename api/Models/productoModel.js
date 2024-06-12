@@ -21,10 +21,11 @@ const sequelize = new Sequelize(
 const productoModel = sequelize.define(
   "producto",
   {
-    ProductoId: { type: Sequelize.INTEGER, primaryKey: true },
+    id: { type: Sequelize.INTEGER, primaryKey: true, field: "ProductoId" },
     ProductoCodigo: Sequelize.BIGINT,
-    ProductoNombre: Sequelize.STRING,
-    ProductoPrecioVenta: Sequelize.BIGINT,
+    name: { type: Sequelize.STRING, field: "ProductoNombre" },
+    price: { type: Sequelize.BIGINT, field: "ProductoPrecioVenta" },
+    // salePrice: { type: Sequelize.BIGINT, field: "ProductoPrecioVenta" },
     ProductoPrecioUnitario: Sequelize.BIGINT,
     ProductoPrecioPromedio: Sequelize.BIGINT,
     ProductoStock: Sequelize.MEDIUMINT,

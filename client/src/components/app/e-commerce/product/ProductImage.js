@@ -15,20 +15,20 @@ const sliderSettings = {
 
 const ProductSingleImage = ({ id, image, name, layout }) => {
   return (
-    <Link
-      to={`/e-commerce/product/product-details/${id}`}
-      className="d-block h-sm-100"
-      key={image.id}
-    >
-      <Image
-        rounded={layout === 'list'}
-        src={image.src}
-        className={classNames('h-100 w-100 fit-cover', {
-          'rounded-top': layout === 'grid'
-        })}
-        alt={name}
-      />
-    </Link>
+    // <Link
+    //   to={`/e-commerce/product/product-details/${id}`}
+    //   className="d-block h-sm-100"
+    //   key={image.id}
+    // >
+    <Image
+      rounded={layout === 'list'}
+      src={image.src}
+      className={classNames('h-100 w-100 fit-cover', {
+        'rounded-top': layout === 'grid'
+      })}
+      alt={name}
+    />
+    // </Link>
   );
 };
 
@@ -39,7 +39,7 @@ const ProductImage = ({ name, id, isNew, files, layout }) => {
         'h-sm-100': layout === 'list'
       })}
     >
-      {files.length === 1 && (
+      {files?.length === 1 && (
         <ProductSingleImage
           id={id}
           image={files[0]}
@@ -47,7 +47,7 @@ const ProductImage = ({ name, id, isNew, files, layout }) => {
           layout={layout}
         />
       )}
-      {files.length > 1 && (
+      {files?.length > 1 && (
         <Slider
           {...sliderSettings}
           className="product-image-slider slick-slider-arrow-inner h-100 full-height-slider"

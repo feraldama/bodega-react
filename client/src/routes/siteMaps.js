@@ -135,12 +135,12 @@ export const appRoutes = {
             },
             {
               name: 'Product list',
-              to: '/e-commerce/product/product-list',
+              to: '/product/product-list',
               active: true
             },
             {
               name: 'Product grid',
-              to: '/e-commerce/product/product-grid',
+              to: '/product/product-grid',
               active: true
             },
             {

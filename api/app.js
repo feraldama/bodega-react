@@ -1,5 +1,6 @@
 const express = require("express");
 const Sequelize = require("sequelize");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
@@ -30,7 +31,10 @@ sequelize
     console.log("error: " + error);
   });
 
-//config Express
+// Enable CORS
+app.use(cors());
+
+// Config Express
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

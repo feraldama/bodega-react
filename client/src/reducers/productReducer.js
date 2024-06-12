@@ -10,6 +10,11 @@ const promoCodes = [
 export const productReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
+    case 'SET_PRODUCTS':
+      return {
+        ...state,
+        products: payload.products
+      };
     case 'SORT_PRODUCT':
       return {
         ...state,

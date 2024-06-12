@@ -11,7 +11,7 @@ import ProductImage from './ProductImage';
 import StarRating from 'components/common/StarRating';
 import Flex from 'components/common/Flex';
 
-const ProductList = ({ product, index }) => {
+const ProductList = ({ product, index, searchInputRef }) => {
   const {
     name,
     category,
@@ -25,12 +25,22 @@ const ProductList = ({ product, index }) => {
     totalReview,
     isInStock,
     isNew,
-    files
+    files,
+    ProductoStock,
+    ProductoStockUnitario
   } = product;
 
   const { isInFavouriteItems } = useContext(ProductContext);
 
   const { handleAddToCart, handleFavouriteClick } = useProductHook(product);
+
+  const handleAddToCartAndFocus = () => {
+    handleAddToCart(1, true, true);
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+      searchInputRef.current.select();
+    }
+  };
 
   return (
     <>
@@ -39,6 +49,7 @@ const ProductList = ({ product, index }) => {
         className={classNames('p-x1', {
           'bg-100': index % 2 !== 0
         })}
+        onClick={() => handleAddToCartAndFocus()}
       >
         <Row>
           <Col sm={5} md={4}>
@@ -54,12 +65,12 @@ const ProductList = ({ product, index }) => {
             <Row className="h-100">
               <Col lg={8}>
                 <h5 className="mt-3 mt-sm-0">
-                  <Link
+                  {/* <Link
                     to={`/e-commerce/product/product-details/${id}`}
                     className="text-1100 fs-9 fs-lg-8"
-                  >
-                    {name}
-                  </Link>
+                  > */}
+                  {name}
+                  {/* </Link> */}
                 </h5>
                 <p className="fs-10 mb-2 mb-md-3">
                   <Link to="#!" className="text-500">
@@ -78,33 +89,48 @@ const ProductList = ({ product, index }) => {
               <Col lg={4} as={Flex} justifyContent="between" direction="column">
                 <div>
                   <h4 className="fs-8 fs-md-7 text-warning mb-0">
-                    {`$${salePrice ? salePrice : price}`}
+                    {`Gs. ${salePrice ? salePrice : price}`}
                   </h4>
                   {salePrice && (
                     <h5 className="fs-10 text-500 mb-0 mt-1">
-                      <del>{`$${price}`}</del>
+                      <del>{`Gs. ${price}`}</del>
                       <span className="ms-2">-{discount}%</span>
                     </h5>
                   )}
-                  <div className="mb-2 mt-3">
+                  {/* <div className="mb-2 mt-3">
                     <StarRating readonly rating={rating} />
                     <span className="ms-1">({totalReview})</span>
-                  </div>
+                  </div> */}
                   <div className="d-none d-lg-block">
-                    <p className="fs-10 mb-1">
-                      Shipping Cost: <strong>{`$${shippingCost}`}</strong>
-                    </p>
+                    {/* <p className="fs-10 mb-1">
+                      Shipping Cost: <strong>{`Gs. ${shippingCost}`}</strong>
+                    </p> */}
                     <p className="fs-10 mb-1">
                       Stock:{' '}
                       <strong
                         className={classNames({
-                          'text-success': isInStock,
-                          'text-danger': !isInStock
+                          'text-success': ProductoStock > 0,
+                          'text-danger': ProductoStock < 1
                         })}
                       >
-                        {isInStock ? 'Available' : 'Stock-Out'}
+                        {ProductoStock > 0 ? ProductoStock : 'Sin Stock'}
                       </strong>
                     </p>
+                    {ProductoStockUnitario > 0 && (
+                      <p className="fs-10 mb-1">
+                        Stock Unitario:{' '}
+                        <strong
+                          className={classNames({
+                            'text-success': ProductoStockUnitario > 0,
+                            'text-danger': ProductoStockUnitario < 1
+                          })}
+                        >
+                          {ProductoStockUnitario > 0
+                            ? ProductoStockUnitario
+                            : 'Sin Stock'}
+                        </strong>
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-2">
@@ -128,7 +154,7 @@ const ProductList = ({ product, index }) => {
                     variant="primary"
                     className="d-lg-block mt-lg-2 w-lg-100"
                     icon="cart-plus"
-                    onClick={() => handleAddToCart(1, true, true)}
+                    onClick={() => handleAddToCartAndFocus()}
                   >
                     Add to Cart
                   </IconButton>

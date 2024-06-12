@@ -10,7 +10,7 @@ import { getSubtotal } from 'helpers/utils';
 const ShoppingCart = () => {
   const [totalCost, setTotalCost] = useState(0);
   const [promoCode, setPromoCode] = useState('');
-
+  const formattedTotalCost = new Intl.NumberFormat('es-ES').format(totalCost);
   const {
     productsState: { cartItems },
     productsDispatch
@@ -38,11 +38,11 @@ const ShoppingCart = () => {
           <Row className="justify-content-between">
             <Col md="auto">
               <h5 className="mb-3 mb-md-0">
-                Shopping Cart ({cartItems.length} Items)
+                Productos ({cartItems.length} Items)
               </h5>
             </Col>
             <Col md="auto">
-              <IconButton
+              {/* <IconButton
                 className="border-300 me-2"
                 iconClassName="me-1"
                 variant="outline-secondary"
@@ -52,15 +52,15 @@ const ShoppingCart = () => {
                 as={Link}
                 to="/e-commerce/product/product-list"
               >
-                Continue Shopping
-              </IconButton>
+                Continuar Comprando
+              </IconButton> */}
               <Button
                 as={Link}
                 to="/e-commerce/checkout"
                 variant="primary"
                 size="sm"
               >
-                Checkout
+                Pagar
               </Button>
             </Col>
           </Row>
@@ -69,16 +69,16 @@ const ShoppingCart = () => {
           {cartItems.length > 0 ? (
             <>
               <Row className="gx-card mx-0 bg-200 text-900 fs-10 fw-semibold">
-                <Col xs={9} md={8} className="py-2">
-                  Name
+                <Col xs={9} md={7} className="py-2">
+                  Nombre
                 </Col>
-                <Col xs={3} md={4}>
+                <Col xs={3} md={5}>
                   <Row>
                     <Col md={8} className="py-2 d-none d-md-block text-center">
-                      Quantity
+                      Cantidad
                     </Col>
                     <Col xs={12} md={4} className="text-end py-2">
-                      Price
+                      Precio
                     </Col>
                   </Row>
                 </Col>
@@ -87,7 +87,7 @@ const ShoppingCart = () => {
                 <CartItem key={product.id} product={product} />
               ))}
               <Row className="fw-bold gx-card mx-0">
-                <Col xs={9} md={8} className="py-2 text-end text-900">
+                <Col xs={8} md={7} className="py-2 text-end text-900">
                   Total
                 </Col>
                 <Col className="px-0">
@@ -100,7 +100,7 @@ const ShoppingCart = () => {
                       md={5}
                       className="text-end py-2 text-nowrap px-x1"
                     >
-                      ${totalCost}
+                      Gs. {formattedTotalCost}
                     </Col>
                   </Row>
                 </Col>
@@ -108,8 +108,7 @@ const ShoppingCart = () => {
             </>
           ) : (
             <p className="p-x1 mb-0 bg-body-tertiary">
-              You have no items in your shopping cart. Go ahead and start
-              shopping!
+              No tiene productos cargados!
             </p>
           )}
         </Card.Body>
@@ -130,7 +129,7 @@ const ShoppingCart = () => {
                   className="border-300"
                   type="submit"
                 >
-                  Apply
+                  Aplicar
                 </Button>
               </div>
             </Form>
@@ -140,12 +139,12 @@ const ShoppingCart = () => {
               variant="primary"
               size="sm"
             >
-              Checkout
+              Pagar
             </Button>
           </Card.Footer>
         )}
       </Card>
-      <CartModal />
+      {/* <CartModal /> */}
     </>
   );
 };
