@@ -1,16 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row, InputGroup } from 'react-bootstrap';
 import IconButton from 'components/common/IconButton';
 import { Link } from 'react-router-dom';
 import CartItem from './CartItem';
 import CartModal from './CartModal';
 import { ProductContext } from 'context/Context';
 import { getSubtotal } from 'helpers/utils';
+import axios from 'axios';
+import { js2xml } from 'xml-js';
+import Flex from 'components/common/Flex';
 
 const ShoppingCart = () => {
   const [totalCost, setTotalCost] = useState(0);
   const [promoCode, setPromoCode] = useState('');
+
+  const [ventaTipo, setVentaTipo] = useState('CO');
+  const [pagoTipo, setPagoTipo] = useState('E');
   const formattedTotalCost = new Intl.NumberFormat('es-ES').format(totalCost);
+
   const {
     productsState: { cartItems },
     productsDispatch
@@ -29,6 +36,70 @@ const ShoppingCart = () => {
       }
     });
     setPromoCode('');
+  };
+
+  const sendRequest = async () => {
+    const clienteId = 32;
+    // Tu objeto JSON
+    const SDTProductoItem = cartItems.map(producto => ({
+      ClienteId: clienteId,
+      Producto: {
+        ProductoId: producto.id,
+        VentaProductoCantidad: producto.quantity,
+        ProductoPrecioVenta: producto.price,
+        ProductoUnidad: 'U', // Asumiendo 'U' como constante
+        VentaProductoPrecioTotal: producto.quantity * producto.price,
+        Combo: 'N', // Asumiendo 'N' como constante
+        ComboPrecio: 0 // Asumiendo 0 como constante
+      }
+    }));
+    console.log('log: 🚀  SDTProductoItem:', SDTProductoItem);
+
+    const json = {
+      Envelope: {
+        _attributes: { xmlns: 'http://schemas.xmlsoap.org/soap/envelope/' },
+        Body: {
+          'PVentaConfirmarWS.VENTACONFIRMAR': {
+            _attributes: { xmlns: 'Alonso' },
+            Sdtproducto: {
+              SDTProductoItem: SDTProductoItem
+            },
+            Ventafechastring: '12/06/24',
+            Almacenorigenid: 1,
+            Clientetipo: 'MI',
+            Cajaid: 3,
+            Usuarioid: 'admin',
+            Efectivo: 50000,
+            Total2: totalCost,
+            Ventatipo: ventaTipo,
+            Pagotipo: pagoTipo,
+            Clienteid: 32
+          }
+        }
+      }
+    };
+
+    // Convierte JSON a XML
+    const xml = js2xml(json, { compact: true, ignoreComment: true, spaces: 4 });
+
+    // Configura la solicitud axios
+    const config = {
+      headers: {
+        'Content-Type': 'text/xml'
+      }
+    };
+
+    try {
+      const response = await axios.post(
+        process.env.REACT_APP_URL +
+          ':8080/AlonsoBodega/servlet/com.alonso.apventaconfirmarws',
+        xml,
+        config
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -54,16 +125,72 @@ const ShoppingCart = () => {
               >
                 Continuar Comprando
               </IconButton> */}
-              <Button
-                as={Link}
-                to="/e-commerce/checkout"
-                variant="primary"
-                size="sm"
-              >
+              <Button onClick={sendRequest} variant="primary" size="sm">
                 Pagar
               </Button>
             </Col>
           </Row>
+          <Row className="mt-2">
+            <Col md="auto">
+              <Form as={Row} className="gx-2">
+                <Col xs="auto">
+                  <small>Tipo:</small>
+                </Col>
+                <Col xs="auto">
+                  <InputGroup size="sm">
+                    <Form.Select
+                      className="pe-5"
+                      defaultValue="CO"
+                      onChange={({ target }) => setVentaTipo(target.value)}
+                    >
+                      <option value="CO">Contado</option>
+                      <option value="CR">Crédito</option>
+                    </Form.Select>
+                  </InputGroup>
+                </Col>
+              </Form>
+            </Col>
+            <Col md="auto">
+              <Form as={Row} className="gx-2">
+                <Col xs="auto">
+                  <small>Pago:</small>
+                </Col>
+                <Col xs="auto">
+                  <InputGroup size="sm">
+                    <Form.Select
+                      className="pe-5"
+                      defaultValue="CO"
+                      onChange={({ target }) => setPagoTipo(target.value)}
+                    >
+                      <option value="E">Efectivo</option>
+                      <option value="P">POS</option>
+                    </Form.Select>
+                  </InputGroup>
+                </Col>
+              </Form>
+            </Col>
+          </Row>
+          {/* <Row className="justify-content-between">
+            <Col md="auto">
+              <Form as={Row} className="gx-2">
+                <Col xs="auto">
+                  <small>Pago:</small>
+                </Col>
+                <Col xs="auto">
+                  <InputGroup size="sm">
+                    <Form.Select
+                      className="pe-5"
+                      defaultValue="CO"
+                      onChange={({ target }) => setPagoTipo(target.value)}
+                    >
+                      <option value="E">Efectivo</option>
+                      <option value="P">POS</option>
+                    </Form.Select>
+                  </InputGroup>
+                </Col>
+              </Form>
+            </Col>
+          </Row> */}
         </Card.Header>
         <Card.Body className="p-0">
           {cartItems.length > 0 ? (
@@ -133,12 +260,7 @@ const ShoppingCart = () => {
                 </Button>
               </div>
             </Form>
-            <Button
-              as={Link}
-              to="/e-commerce/checkout"
-              variant="primary"
-              size="sm"
-            >
+            <Button onClick={sendRequest} variant="primary" size="sm">
               Pagar
             </Button>
           </Card.Footer>

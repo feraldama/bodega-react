@@ -5,6 +5,11 @@ const WebpackRTLPlugin = require('@automattic/webpack-rtl-plugin');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 
 module.exports = {
+  resolve: {
+    fallback: {
+      buffer: require.resolve('buffer/')
+    }
+  },
   mode: 'development',
   entry: {
     theme: './src/assets/scss/theme.scss',
