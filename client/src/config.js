@@ -3,7 +3,7 @@ export const navbarBreakPoint = 'xl'; // Vertical navbar breakpoint
 export const topNavbarBreakpoint = 'lg';
 export const themeVariants = ['light', 'dark', 'auto'];
 export const settings = {
-  isFluid: false,
+  isFluid: true,
   isRTL: false,
   isDark: false,
   theme: 'light',
