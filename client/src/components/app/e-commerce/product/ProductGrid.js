@@ -57,7 +57,7 @@ const ProductGrid = ({ product, ...rest }) => {
             layout="grid"
             productoImagen={ProductoImagen}
           />
-          <div className="p-3">
+          <div className="pt-1 pb-1 p-3">
             <h5 className="fs-9">
               {/* <Link
                 className="text-1100"

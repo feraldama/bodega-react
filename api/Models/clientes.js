@@ -19,20 +19,22 @@ const sequelize = new Sequelize(
 );
 
 const clientes = sequelize.define(
-  "producto",
+  "clientes",
   {
-    id: { type: Sequelize.INTEGER, primaryKey: true, field: "ClienteId" },
+    ClienteId: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      field: "ClienteId",
+    },
     ClienteRUC: Sequelize.STRING,
-    name: { type: Sequelize.STRING, field: "ClienteNombre" },
-    lastname: { type: Sequelize.STRING, field: "ClienteApellido" },
-    // salePrice: { type: Sequelize.BIGINT, field: "ProductoPrecioVenta" },
-    address: { type: Sequelize.STRING, field: "ClienteDireccion" },
-    telefono: { type: Sequelize.MEDIUMINT, field: "ClienteTelefono" },
-    clienteTipo: { type: Sequelize.STRING, field: "ClienteTipo" },
-    UsuarioId: { type: Sequelize.STRING, field: "UsuarioId" },
+    ClienteNombre: Sequelize.STRING,
+    ClienteApellido: Sequelize.STRING,
+    ClienteDireccion: Sequelize.STRING,
+    ClienteTelefono: Sequelize.STRING,
+    ClienteTipo: Sequelize.STRING,
   },
   {
-    tableName: "producto",
+    tableName: "clientes",
     timestamps: false, // Specify the table name here
   }
 );
