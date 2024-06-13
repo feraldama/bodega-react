@@ -24,6 +24,7 @@ const ProductGrid = ({ product, ...rest }) => {
     isNew,
     files,
     ProductoStock,
+    ProductoImagen,
     ProductoStockUnitario
   } = product;
 
@@ -54,6 +55,7 @@ const ProductGrid = ({ product, ...rest }) => {
             isNew={isNew}
             files={files}
             layout="grid"
+            productoImagen={ProductoImagen}
           />
           <div className="p-3">
             <h5 className="fs-9">
