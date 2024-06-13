@@ -34,10 +34,10 @@ const ProductGrid = ({ product, ...rest }) => {
 
   const handleAddToCartAndFocus = () => {
     handleAddToCart(1, true, true);
-    if (rest.searchInputRef.current) {
-      rest.searchInputRef.current.focus();
-      rest.searchInputRef.current.select();
-    }
+    // if (rest.searchInputRef.current) {
+    //   rest.searchInputRef.current.focus();
+    //   rest.searchInputRef.current.select();
+    // }
   };
 
   return (

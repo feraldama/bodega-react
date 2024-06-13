@@ -7,7 +7,6 @@ import logo from 'assets/img/illustrations/falcon.png';
 const Logo = ({ at, width, className, textClass, ...rest }) => {
   return (
     <Link
-      REACT_APP_URL
       to={
         process.env.REACT_APP_URL +
         ':8080/AlonsoBodega/servlet/com.alonso.inicio'

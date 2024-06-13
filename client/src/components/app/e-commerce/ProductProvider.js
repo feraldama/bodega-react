@@ -5,13 +5,12 @@ import { productData } from 'data/ecommerce/productData';
 import { productReducer } from 'reducers/productReducer';
 import axios from 'axios';
 import product3 from 'assets/img/products/4.jpg';
+import product2 from 'assets/img/products/2.jpg';
 
 const ProductProvider = ({ children }) => {
-  const [productosBD, setProductosBD] = useState(productData);
-
   const initData = {
-    initProducts: productosBD,
-    products: productosBD,
+    initProducts: productData,
+    products: productData,
     cartItems: [
       // {
       //   ...productosBD[0],
@@ -112,7 +111,6 @@ const ProductProvider = ({ children }) => {
           type: 'SET_PRODUCTS',
           payload: { products: updatedProducts }
         });
-        setProductosBD(updatedProducts);
       })
       .catch(function (error) {
         console.log(error);

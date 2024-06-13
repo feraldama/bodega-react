@@ -36,10 +36,10 @@ const ProductList = ({ product, index, searchInputRef }) => {
 
   const handleAddToCartAndFocus = () => {
     handleAddToCart(1, true, true);
-    if (searchInputRef.current) {
-      searchInputRef.current.focus();
-      searchInputRef.current.select();
-    }
+    // if (searchInputRef.current) {
+    //   searchInputRef.current.focus();
+    //   searchInputRef.current.select();
+    // }
   };
 
   return (

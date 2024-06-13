@@ -53,7 +53,6 @@ const ShoppingCart = () => {
         ComboPrecio: 0 // Asumiendo 0 como constante
       }
     }));
-    console.log('log: 🚀  SDTProductoItem:', SDTProductoItem);
 
     const json = {
       Envelope: {
@@ -107,12 +106,12 @@ const ShoppingCart = () => {
       <Card>
         <Card.Header>
           <Row className="justify-content-between">
-            <Col md="auto">
+            <Col xs="auto">
               <h5 className="mb-3 mb-md-0">
                 Productos ({cartItems.length} Items)
               </h5>
             </Col>
-            <Col md="auto">
+            <Col xs="auto">
               {/* <IconButton
                 className="border-300 me-2"
                 iconClassName="me-1"
@@ -196,16 +195,23 @@ const ShoppingCart = () => {
           {cartItems.length > 0 ? (
             <>
               <Row className="gx-card mx-0 bg-200 text-900 fs-10 fw-semibold">
-                <Col xs={9} md={7} className="py-2">
+                <Col xs={9} md={5} className="py-2">
                   Nombre
                 </Col>
-                <Col xs={3} md={5}>
+                <Col xs={3} md={7}>
                   <Row>
-                    <Col md={8} className="py-2 d-none d-md-block text-center">
+                    <Col md={4} className="py-2 d-none d-md-block text-center">
                       Cantidad
                     </Col>
+                    <Col
+                      xs={12}
+                      md={4}
+                      className="d-none d-md-block text-end py-2"
+                    >
+                      Precio Uni.
+                    </Col>
                     <Col xs={12} md={4} className="text-end py-2">
-                      Precio
+                      Total
                     </Col>
                   </Row>
                 </Col>
@@ -214,7 +220,7 @@ const ShoppingCart = () => {
                 <CartItem key={product.id} product={product} />
               ))}
               <Row className="fw-bold gx-card mx-0">
-                <Col xs={8} md={7} className="py-2 text-end text-900">
+                <Col xs={8} md={4} className="py-2 text-end text-900">
                   Total
                 </Col>
                 <Col className="px-0">

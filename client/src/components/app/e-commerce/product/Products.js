@@ -82,6 +82,12 @@ const Products = () => {
     }
   }, []);
 
+  const handleFocus = () => {
+    if (searchInputRef.current) {
+      searchInputRef.current.select();
+    }
+  };
+
   return (
     <Row className="mt-3">
       <Col lg={5}>
@@ -115,6 +121,7 @@ const Products = () => {
                   onChange={e => setSearchTerm(e.target.value)}
                   style={{ maxWidth: '12.5rem' }}
                   ref={searchInputRef}
+                  onFocus={handleFocus}
                 />
                 <Form.Select
                   size="sm"

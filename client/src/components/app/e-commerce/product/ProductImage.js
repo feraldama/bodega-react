@@ -20,14 +20,32 @@ const ProductSingleImage = ({ id, image, name, layout }) => {
     //   className="d-block h-sm-100"
     //   key={image.id}
     // >
-    <Image
-      rounded={layout === 'list'}
-      src={image.src}
-      className={classNames('h-100 w-100 fit-cover', {
-        'rounded-top': layout === 'grid'
-      })}
-      alt={name}
-    />
+    // <Image
+    //   rounded={layout === 'list'}
+    //   src={image.src}
+    //   className={classNames('h-100 w-100 fit-cover', {
+    //     'rounded-top': layout === 'grid'
+    //   })}
+    //   alt={name}
+    // />
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
+      }}
+    >
+      <Image
+        rounded={layout === 'list'}
+        src={image.src}
+        style={{ maxWidth: '60%', height: 'auto' }}
+        className={classNames('fit-cover', {
+          'rounded-top': layout === 'grid'
+        })}
+        alt={name}
+      />
+    </div>
     // </Link>
   );
 };

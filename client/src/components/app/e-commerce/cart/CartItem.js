@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -8,12 +8,15 @@ import QuantityController from '../QuantityController';
 
 const CartItem = ({ product }) => {
   const { id, files, name, quantity, totalPrice, price } = product;
-  const formattedPrice = new Intl.NumberFormat('es-ES').format(
+  const formattedTotalPrice = new Intl.NumberFormat('es-ES').format(
     price * quantity
   );
+  const formattedPrice = new Intl.NumberFormat('es-ES').format(price);
   const { handleAddToCart } = useProductHook(product);
 
   const { productsDispatch } = useContext(ProductContext);
+
+  const quantityInputRef = useRef(null);
 
   const handleRemove = () => {
     productsDispatch({
@@ -38,9 +41,16 @@ const CartItem = ({ product }) => {
     handleAddToCart(parseInt(e.target.value < 1 ? 1 : e.target.value));
   };
 
+  useEffect(() => {
+    if (quantityInputRef.current) {
+      quantityInputRef.current.focus();
+      quantityInputRef.current.select();
+    }
+  }, []);
+
   return (
     <Row className="gx-card mx-0 align-items-center border-bottom border-200">
-      <Col xs={7} className="py-3">
+      <Col xs={5} className="py-3">
         <div className="d-flex align-items-center">
           {/* <Link to="/e-commerce/product/product-details"> */}
           <img
@@ -52,10 +62,7 @@ const CartItem = ({ product }) => {
           {/* </Link> */}
           <div className="flex-1">
             <h5 className="fs-9">
-              {/* <Link
-                to="/e-commerce/product/product-details"
-                className="text-900"
-              > */}
+              {/* <Link to="/e-commerce/product/product-details" className="text-900"> */}
               {name}
               {/* </Link> */}
             </h5>
@@ -72,15 +79,16 @@ const CartItem = ({ product }) => {
           </div>
         </div>
       </Col>
-      <Col xs={5} className="py-3">
+      <Col xs={7} className="py-3">
         <Row className="align-items-center">
           <Col
-            md={{ span: 8, order: 0 }}
+            md={{ span: 4, order: 0 }}
             xs={{ order: 1 }}
             className="d-flex justify-content-end justify-content-md-center"
           >
             <div>
               <QuantityController
+                ref={quantityInputRef}
                 quantity={quantity}
                 handleChange={handleChange}
                 handleIncrease={handleIncrease}
@@ -92,9 +100,16 @@ const CartItem = ({ product }) => {
           <Col
             md={{ span: 4, order: 1 }}
             xs={{ order: 0 }}
-            className="text-end ps-0 mb-2 mb-md-0 text-600"
+            className="d-none d-md-block text-end ps-0 mb-2 mb-md-0 text-600"
           >
             Gs. {formattedPrice}
+          </Col>
+          <Col
+            md={{ span: 4, order: 2 }}
+            xs={{ order: 0 }}
+            className="text-end ps-0 mb-2 mb-md-0 text-600"
+          >
+            Gs. {formattedTotalPrice}
           </Col>
         </Row>
       </Col>
