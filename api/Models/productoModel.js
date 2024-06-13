@@ -34,6 +34,7 @@ const productoModel = sequelize.define(
     ProductoStockMinimo: Sequelize.MEDIUMINT,
     ProductoPrecioVentaMayorista: Sequelize.BIGINT,
     ProductoIVA: Sequelize.SMALLINT,
+    ProductoImagen: { type: Sequelize.BLOB("long"), allowNull: true },
   },
   {
     tableName: "producto",

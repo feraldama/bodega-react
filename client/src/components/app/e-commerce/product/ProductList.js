@@ -27,6 +27,7 @@ const ProductList = ({ product, index, searchInputRef }) => {
     isNew,
     files,
     ProductoStock,
+    ProductoImagen,
     ProductoStockUnitario
   } = product;
 
@@ -59,6 +60,7 @@ const ProductList = ({ product, index, searchInputRef }) => {
               isNew={isNew}
               files={files}
               layout="list"
+              productoImagen={ProductoImagen}
             />
           </Col>
           <Col sm={7} md={8}>

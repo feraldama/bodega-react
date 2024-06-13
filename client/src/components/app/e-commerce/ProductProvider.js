@@ -105,7 +105,8 @@ const ProductProvider = ({ children }) => {
       .then(function (response) {
         const updatedProducts = response.data.map(product => ({
           ...product,
-          ...additionalData
+          ...additionalData,
+          ProductoImagen: product.ProductoImagen.data
         }));
         productsDispatch({
           type: 'SET_PRODUCTS',

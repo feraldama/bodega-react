@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import classNames from 'classnames';
+import { Buffer } from 'buffer';
 
 const sliderSettings = {
   autoplay: false,
@@ -13,7 +14,10 @@ const sliderSettings = {
   slidesToScroll: 1
 };
 
-const ProductSingleImage = ({ id, image, name, layout }) => {
+const ProductSingleImage = ({ id, image, name, layout, productoImagen }) => {
+  // if (productoImagen.length > 1) {
+  //   console.log('log: 🚀  productoImagen 2:', productoImagen);
+  // }
   return (
     // <Link
     //   to={`/e-commerce/product/product-details/${id}`}
@@ -28,6 +32,15 @@ const ProductSingleImage = ({ id, image, name, layout }) => {
     //   })}
     //   alt={name}
     // />
+
+    // <img
+    //   src={`data:image/jpeg;base64,${Buffer.from(productoImagen).toString(
+    //     'base64'
+    //   )}`}
+    //   // src={`data:image/jpeg;base64,${productoImagen}`}
+    //   alt={name}
+    // />
+
     <div
       style={{
         display: 'flex',
@@ -38,7 +51,14 @@ const ProductSingleImage = ({ id, image, name, layout }) => {
     >
       <Image
         rounded={layout === 'list'}
-        src={image.src}
+        // src={image.src}
+        src={
+          productoImagen && productoImagen.length > 1
+            ? `data:image/jpeg;base64,${Buffer.from(productoImagen).toString(
+                'base64'
+              )}`
+            : image.src
+        }
         style={{ maxWidth: '60%', height: 'auto' }}
         className={classNames('fit-cover', {
           'rounded-top': layout === 'grid'
@@ -50,7 +70,7 @@ const ProductSingleImage = ({ id, image, name, layout }) => {
   );
 };
 
-const ProductImage = ({ name, id, isNew, files, layout }) => {
+const ProductImage = ({ name, id, isNew, files, layout, productoImagen }) => {
   return (
     <div
       className={classNames('position-relative rounded-top overflow-hidden', {
@@ -63,6 +83,7 @@ const ProductImage = ({ name, id, isNew, files, layout }) => {
           image={files[0]}
           name={name}
           layout={layout}
+          productoImagen={productoImagen}
         />
       )}
       {files?.length > 1 && (
