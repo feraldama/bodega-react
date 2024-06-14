@@ -15,14 +15,14 @@ import classNames from 'classnames';
 import ProductList from './ProductList';
 import ProductGrid from './ProductGrid';
 import { ProductContext } from 'context/Context';
-import CartModal from '../cart/CartModal';
 import usePagination from 'hooks/usePagination';
 import ShoppingCart from 'components/app/e-commerce/cart/ShoppingCart';
 import Flex from 'components/common/Flex';
+import NumericKeypad from '../NumericKeypad/NumericKeypad';
 
 const Products = () => {
   const {
-    productsState: { products },
+    productsState: { products, selectedProductId, cartItems },
     productsDispatch
   } = useContext(ProductContext);
 
@@ -45,16 +45,9 @@ const Products = () => {
       data: paginatedProducts,
       totalItems,
       itemsPerPage,
-      currentPage,
-      canNextPage,
-      canPreviousPage,
-      paginationArray,
       from,
       to
     },
-    nextPage,
-    prevPage,
-    goToPage,
     setItemsPerPage
   } = usePagination(filteredProducts, productPerPage);
 
@@ -88,6 +81,26 @@ const Products = () => {
     }
   };
 
+  const handleNumberClick = number => {
+    if (selectedProductId !== null) {
+      const updatedCartItems = cartItems
+        .map(item => {
+          if (item.id === selectedProductId) {
+            const newQuantity = parseInt(
+              item.quantity == 0 ? number : `${item.quantity}${number}`
+            );
+            return { ...item, quantity: newQuantity };
+          }
+          return item;
+        })
+        .filter(item => item.id === selectedProductId);
+      productsDispatch({
+        type: 'UPDATE_CART_QUANTITY',
+        payload: { cartItems: updatedCartItems }
+      });
+    }
+  };
+
   return (
     <Row className="mt-3">
       <Col lg={5}>
@@ -96,11 +109,21 @@ const Products = () => {
           style={{
             position: 'sticky',
             top: '87px',
-            maxHeight: 'calc(100vh - 100px)',
+            maxHeight: 'calc(100vh - 400px)',
             overflowY: 'auto'
           }}
         >
           <ShoppingCart />
+        </Card>
+        <Card
+          style={{
+            position: 'sticky',
+            top: 'calc(100vh - 290px)'
+            // maxHeight: 'calc(100vh - 400px)',
+            // overflowY: 'auto'
+          }}
+        >
+          <NumericKeypad onNumberClick={handleNumberClick} />
         </Card>
       </Col>
       <Col lg={7}>
@@ -246,71 +269,7 @@ const Products = () => {
               )}
             </Row>
           </Card.Body>
-          {/* <Card.Footer
-            className={classNames('d-flex justify-content-center', {
-              'bg-body-tertiary mt-n1': isGrid,
-              'border-top': isList
-            })}
-          >
-            <div>
-              <OverlayTrigger
-                placement="top"
-                overlay={<Tooltip style={{ position: 'fixed' }}>Prev</Tooltip>}
-              >
-                <Button
-                  variant="falcon-default"
-                  size="sm"
-                  disabled={!canPreviousPage}
-                  onClick={prevPage}
-                  className="me-2"
-                  trigger="focus"
-                >
-                  <FontAwesomeIcon icon="chevron-left" />
-                </Button>
-              </OverlayTrigger>
-            </div>
-
-            <ul className="pagination mb-0">
-              {paginationArray.map(page => (
-                <li
-                  key={page}
-                  className={classNames({ active: currentPage === page })}
-                >
-                  <Button
-                    size="sm"
-                    variant="falcon-default"
-                    className="page me-2"
-                    onClick={() => goToPage(page)}
-                  >
-                    {page}
-                  </Button>
-                </li>
-              ))}
-            </ul>
-            <div>
-              <OverlayTrigger
-                trigger="click"
-                placement="top"
-                overlay={
-                  <Tooltip style={{ position: 'fixed' }} id="button-tooltip-2">
-                    Next
-                  </Tooltip>
-                }
-              >
-                <Button
-                  variant="falcon-default"
-                  size="sm"
-                  disabled={!canNextPage}
-                  onClick={nextPage}
-                  trigger="focus"
-                >
-                  <FontAwesomeIcon icon="chevron-right" />
-                </Button>
-              </OverlayTrigger>
-            </div>
-          </Card.Footer> */}
         </Card>
-        {/* <CartModal /> */}
       </Col>
     </Row>
   );

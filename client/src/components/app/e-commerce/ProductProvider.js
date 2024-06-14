@@ -25,6 +25,7 @@ const ProductProvider = ({ children }) => {
       // { ...productosBD[2], quantity: 3, totalPrice: productosBD[2].price * 3 }
     ],
     promo: null,
+    selectedProductId: null,
     favouriteItems: [],
     cartModal: {
       show: false,

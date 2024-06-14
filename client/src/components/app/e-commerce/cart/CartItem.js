@@ -1,29 +1,31 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import useProductHook from '../product/useProductHook';
 import { ProductContext } from 'context/Context';
 import QuantityController from '../QuantityController';
+import { Buffer } from 'buffer';
 
 const CartItem = ({ product }) => {
-  const { id, files, name, quantity, totalPrice, price } = product;
+  const { id, files, name, quantity, totalPrice, price, ProductoImagen } =
+    product;
   const formattedTotalPrice = new Intl.NumberFormat('es-ES').format(
     price * quantity
   );
   const formattedPrice = new Intl.NumberFormat('es-ES').format(price);
   const { handleAddToCart } = useProductHook(product);
 
-  const { productsDispatch } = useContext(ProductContext);
+  const {
+    productsState: { selectedProductId },
+    productsDispatch
+  } = useContext(ProductContext);
 
   const quantityInputRef = useRef(null);
 
   const handleRemove = () => {
     productsDispatch({
       type: 'REMOVE_FROM_CART',
-      payload: {
-        product
-      }
+      payload: { product }
     });
   };
 
@@ -32,13 +34,24 @@ const CartItem = ({ product }) => {
   };
 
   const handleDecrease = () => {
-    if (quantity > 1) {
+    if (quantity > 0) {
       handleAddToCart(parseInt(quantity - 1));
     }
   };
 
   const handleChange = e => {
-    handleAddToCart(parseInt(e.target.value < 1 ? 1 : e.target.value));
+    handleAddToCart(parseInt(e.target.value < 1 ? 0 : e.target.value));
+  };
+
+  const productoSeleccionado = e => {
+    if (quantityInputRef.current) {
+      quantityInputRef.current.focus();
+      quantityInputRef.current.select();
+    }
+    productsDispatch({
+      type: 'UPDATE_SELECTED_PRODID',
+      payload: { id }
+    });
   };
 
   useEffect(() => {
@@ -49,31 +62,37 @@ const CartItem = ({ product }) => {
   }, []);
 
   return (
-    <Row className="gx-card mx-0 align-items-center border-bottom border-200">
+    <Row
+      className={`gx-card mx-0 align-items-center border-bottom border-200 ${
+        id == selectedProductId ? 'bg-light' : ''
+      }`}
+      onClick={productoSeleccionado}
+    >
       <Col xs={5} className="py-3">
         <div className="d-flex align-items-center">
-          {/* <Link to="/e-commerce/product/product-details"> */}
           <img
-            src={files[0].src}
+            src={
+              ProductoImagen && ProductoImagen.length > 1
+                ? `data:image/jpeg;base64,${Buffer.from(
+                    ProductoImagen
+                  ).toString('base64')}`
+                : files[0].src
+            }
             width="60"
             alt={name}
             className="img-fluid rounded-1 me-3 d-none d-md-block"
           />
-          {/* </Link> */}
+
           <div className="flex-1">
-            <h5 className="fs-9">
-              {/* <Link to="/e-commerce/product/product-details" className="text-900"> */}
-              {name}
-              {/* </Link> */}
-            </h5>
+            <h5 className="fs-9">{name}</h5>
             <div className="fs-11 fs-md-10">
               <Button
                 variant="link"
                 size="sm"
-                className="text-danger fs-11 fs-md-10 fw-normal p-0"
+                className="text-danger fs-11 fs-md-10 p-0"
                 onClick={() => handleRemove(id)}
               >
-                Remover
+                Eliminar
               </Button>
             </div>
           </div>

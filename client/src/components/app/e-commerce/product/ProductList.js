@@ -4,11 +4,9 @@ import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import IconButton from 'components/common/IconButton';
 import { ProductContext } from 'context/Context';
 import useProductHook from './useProductHook';
 import ProductImage from './ProductImage';
-import StarRating from 'components/common/StarRating';
 import Flex from 'components/common/Flex';
 
 const ProductList = ({ product, index, searchInputRef }) => {
@@ -20,10 +18,6 @@ const ProductList = ({ product, index, searchInputRef }) => {
     price,
     discount,
     salePrice,
-    shippingCost,
-    rating,
-    totalReview,
-    isInStock,
     isNew,
     files,
     ProductoStock,
@@ -31,12 +25,16 @@ const ProductList = ({ product, index, searchInputRef }) => {
     ProductoStockUnitario
   } = product;
 
-  const { isInFavouriteItems } = useContext(ProductContext);
+  const { productsDispatch } = useContext(ProductContext);
 
   const { handleAddToCart, handleFavouriteClick } = useProductHook(product);
 
   const handleAddToCartAndFocus = () => {
     handleAddToCart(1, true, true);
+    productsDispatch({
+      type: 'UPDATE_SELECTED_PRODID',
+      payload: { id }
+    });
     // if (searchInputRef.current) {
     //   searchInputRef.current.focus();
     //   searchInputRef.current.select();
@@ -66,14 +64,7 @@ const ProductList = ({ product, index, searchInputRef }) => {
           <Col sm={7} md={8}>
             <Row className="h-100">
               <Col lg={8}>
-                <h5 className="mt-3 mt-sm-0">
-                  {/* <Link
-                    to={`/e-commerce/product/product-details/${id}`}
-                    className="text-1100 fs-9 fs-lg-8"
-                  > */}
-                  {name}
-                  {/* </Link> */}
-                </h5>
+                <h5 className="mt-3 mt-sm-0">{name}</h5>
                 <p className="fs-10 mb-2 mb-md-3">
                   <Link to="#!" className="text-500">
                     {category}
@@ -99,14 +90,8 @@ const ProductList = ({ product, index, searchInputRef }) => {
                       <span className="ms-2">-{discount}%</span>
                     </h5>
                   )}
-                  {/* <div className="mb-2 mt-3">
-                    <StarRating readonly rating={rating} />
-                    <span className="ms-1">({totalReview})</span>
-                  </div> */}
+
                   <div className="d-none d-lg-block">
-                    {/* <p className="fs-10 mb-1">
-                      Shipping Cost: <strong>{`Gs. ${shippingCost}`}</strong>
-                    </p> */}
                     <p className="fs-10 mb-1">
                       Stock:{' '}
                       <strong
@@ -134,32 +119,6 @@ const ProductList = ({ product, index, searchInputRef }) => {
                       </p>
                     )}
                   </div>
-                </div>
-                <div className="mt-2">
-                  <IconButton
-                    size="sm"
-                    variant={
-                      isInFavouriteItems(id)
-                        ? 'outline-danger'
-                        : 'outline-secondary'
-                    }
-                    className={classNames('d-lg-block me-2 me-lg-0 w-lg-100', {
-                      'border-300': !isInFavouriteItems(id)
-                    })}
-                    icon={isInFavouriteItems(id) ? 'heart' : ['far', 'heart']}
-                    onClick={handleFavouriteClick}
-                  >
-                    Favourite
-                  </IconButton>
-                  <IconButton
-                    size="sm"
-                    variant="primary"
-                    className="d-lg-block mt-lg-2 w-lg-100"
-                    icon="cart-plus"
-                    onClick={() => handleAddToCartAndFocus()}
-                  >
-                    Add to Cart
-                  </IconButton>
                 </div>
               </Col>
             </Row>

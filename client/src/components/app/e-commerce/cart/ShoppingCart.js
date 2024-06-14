@@ -1,42 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card, Col, Form, Row, InputGroup } from 'react-bootstrap';
-import IconButton from 'components/common/IconButton';
-import { Link } from 'react-router-dom';
 import CartItem from './CartItem';
-import CartModal from './CartModal';
 import { ProductContext } from 'context/Context';
 import { getSubtotal } from 'helpers/utils';
 import axios from 'axios';
 import { js2xml } from 'xml-js';
-import Flex from 'components/common/Flex';
+import Swal from 'sweetalert2';
+
+import '../NumericKeypad/NumericKeypad.css'; // Importa el archivo CSS
 
 const ShoppingCart = () => {
   const [totalCost, setTotalCost] = useState(0);
-  const [promoCode, setPromoCode] = useState('');
-
   const [ventaTipo, setVentaTipo] = useState('CO');
   const [pagoTipo, setPagoTipo] = useState('E');
   const formattedTotalCost = new Intl.NumberFormat('es-ES').format(totalCost);
 
   const {
-    productsState: { cartItems },
-    productsDispatch
+    productsState: { cartItems }
   } = useContext(ProductContext);
 
   useEffect(() => {
     setTotalCost(getSubtotal(cartItems));
   }, [cartItems]);
-
-  const applyPromo = e => {
-    e.preventDefault();
-    productsDispatch({
-      type: 'APPLY_PROMO',
-      payload: {
-        promoCode
-      }
-    });
-    setPromoCode('');
-  };
 
   const sendRequest = async () => {
     const clienteId = 32;
@@ -95,12 +80,50 @@ const ShoppingCart = () => {
         xml,
         config
       );
+      // Swal.fire({
+      //   title: 'Custom width, padding, color, background.',
+      //   width: 600,
+      //   padding: '3em',
+      //   color: '#716add',
+      //   background: '#fff url(/images/trees.png)',
+      //   backdrop: `
+      //     rgba(0,0,123,0.4)
+      //     url("/images/nyan-cat.gif")
+      //     left top
+      //     no-repeat
+      //   `
+      // });
+
+      Swal.fire({
+        title: 'Venta realizada con éxito!',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar',
+        denyButtonText: `Don't save`,
+        width: 600,
+        padding: '3em',
+        color: '#716add',
+        background: '#fff url(/images/trees.png)',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/nyan-cat.gif")
+          left top
+          no-repeat
+        `
+      }).then(result => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          window.location.reload();
+        } else if (result.isDenied) {
+          Swal.fire('Changes are not saved', '', 'info');
+        }
+      });
+
       console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <>
       <Card>
@@ -112,18 +135,6 @@ const ShoppingCart = () => {
               </h5>
             </Col>
             <Col xs="auto">
-              {/* <IconButton
-                className="border-300 me-2"
-                iconClassName="me-1"
-                variant="outline-secondary"
-                size="sm"
-                icon="chevron-left"
-                transform="shrink-4"
-                as={Link}
-                to="/e-commerce/product/product-list"
-              >
-                Continuar Comprando
-              </IconButton> */}
               <Button onClick={sendRequest} variant="primary" size="sm">
                 Pagar
               </Button>
@@ -169,27 +180,6 @@ const ShoppingCart = () => {
               </Form>
             </Col>
           </Row>
-          {/* <Row className="justify-content-between">
-            <Col md="auto">
-              <Form as={Row} className="gx-2">
-                <Col xs="auto">
-                  <small>Pago:</small>
-                </Col>
-                <Col xs="auto">
-                  <InputGroup size="sm">
-                    <Form.Select
-                      className="pe-5"
-                      defaultValue="CO"
-                      onChange={({ target }) => setPagoTipo(target.value)}
-                    >
-                      <option value="E">Efectivo</option>
-                      <option value="P">POS</option>
-                    </Form.Select>
-                  </InputGroup>
-                </Col>
-              </Form>
-            </Col>
-          </Row> */}
         </Card.Header>
         <Card.Body className="p-0">
           {cartItems.length > 0 ? (
@@ -248,31 +238,12 @@ const ShoppingCart = () => {
 
         {cartItems.length > 0 && (
           <Card.Footer className="bg-body-tertiary d-flex justify-content-end">
-            <Form className="me-3" onSubmit={applyPromo}>
-              <div className="input-group input-group-sm">
-                <Form.Control
-                  type="text"
-                  placeholder="GET50"
-                  value={promoCode}
-                  onChange={e => setPromoCode(e.target.value)}
-                />
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  className="border-300"
-                  type="submit"
-                >
-                  Aplicar
-                </Button>
-              </div>
-            </Form>
             <Button onClick={sendRequest} variant="primary" size="sm">
               Pagar
             </Button>
           </Card.Footer>
         )}
       </Card>
-      {/* <CartModal /> */}
     </>
   );
 };

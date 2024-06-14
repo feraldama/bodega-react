@@ -55,7 +55,18 @@ export const productReducer = (state, action) => {
           quantity: payload.quantity
         }
       };
-
+    case 'UPDATE_CART_QUANTITY':
+      return {
+        ...state,
+        cartItems: state.cartItems.map(item =>
+          item.id === payload.cartItems[0].id ? payload.cartItems[0] : item
+        )
+      };
+    case 'UPDATE_SELECTED_PRODID':
+      return {
+        ...state,
+        selectedProductId: payload.id
+      };
     case 'REMOVE_FROM_CART':
       return {
         ...state,

@@ -1,0 +1,31 @@
+.numeric-keypad .btn {
+  font-size: 1.5rem;
+  padding: 10px;
+  height: 60px;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.numeric-keypad td {
+  padding: 0;
+}
+
+.numeric-keypad .btn-light {
+  background-color: white;
+  border: 1px solid #dee2e6;
+}
+
+.numeric-keypad .btn-light:hover {
+  background-color: #f8f9fa;
+}
+/* 
+.numeric-keypad {
+  margin-top: 50px;
+} */
+@media (max-width: 768px) {
+  .numeric-keypad {
+    display: none;
+  }
+}
