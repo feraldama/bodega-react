@@ -1,8 +1,14 @@
+@media (max-width: 768px) {
+  .numeric-keypad {
+    display: none;
+  }
+}
+
 .numeric-keypad .btn {
-  font-size: 1.5rem;
+  font-size: 1rem;
   padding: 10px;
-  height: 60px;
-  width: 60px;
+  /* height: 60px !important;
+  width: 60px !important; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,12 +26,7 @@
 .numeric-keypad .btn-light:hover {
   background-color: #f8f9fa;
 }
-/* 
-.numeric-keypad {
-  margin-top: 50px;
-} */
-@media (max-width: 768px) {
-  .numeric-keypad {
-    display: none;
-  }
+
+.pago-button {
+  height: 156px !important;
 }
