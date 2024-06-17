@@ -109,7 +109,7 @@ const Products = () => {
           style={{
             position: 'sticky',
             top: '85px',
-            maxHeight: 'calc(100vh - 366px )',
+            maxHeight: 'calc(100vh - 438px )',
             overflowY: 'auto'
           }}
         >
@@ -118,7 +118,7 @@ const Products = () => {
         <Card
           style={{
             position: 'sticky',
-            top: 'calc(100vh - 265px)'
+            top: 'calc(100vh - 337px)'
             // maxHeight: 'calc(100vh - 400px)',
             // overflowY: 'auto'
           }}

@@ -28,5 +28,9 @@
 }
 
 .pago-button {
-  height: 156px !important;
+  height: 212px !important;
+}
+
+.fixed-width-button {
+  width: 110px !important; /* Ajusta el ancho según tus necesidades */
 }

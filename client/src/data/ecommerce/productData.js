@@ -15,7 +15,7 @@ import product9 from 'assets/img/products/9.jpg';
 
 export const productData = [
   {
-    name: 'Apple iPad Air 2019 (3GB RAM, 128GB ROM, 8MP Main Camera)',
+    name: 'Apple iPad Air 2019',
     category: 'Mobile & Tabs',
     id: 'TN000001',
     features: ['3GB RAM', '128GB ROM', 'Apple A12 Bionic (7 nm)', 'iOS 12.1.3'],
@@ -68,7 +68,7 @@ export const productData = [
     files: [{ id: 1, src: product3 }]
   },
   {
-    name: 'Apple iPhone XS Max (4GB RAM, 512GB ROM, 12MP Main Camera)',
+    name: 'Apple iPhone XS',
     category: 'Mobile & Tabs',
     id: 'TN000002',
     features: [
