@@ -108,7 +108,7 @@ const Products = () => {
           className="mb-3"
           style={{
             position: 'sticky',
-            top: '87px',
+            top: '85px',
             maxHeight: 'calc(100vh - 400px)',
             overflowY: 'auto'
           }}

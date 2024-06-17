@@ -5,7 +5,7 @@ import ProfileDropdown from 'components/navbar/top/ProfileDropdown';
 import { Nav } from 'react-bootstrap';
 import NineDotMenu from './NineDotMenu';
 import ThemeControlDropdown from './ThemeControlDropdown';
-import TopProducts from '../../app/e-commerce/top-products/TopProducts';
+import TopProducts from 'components/app/e-commerce/top-products/TopProducts';
 import { ProductContext } from 'context/Context';
 
 const TopNavRightSideNavItem = () => {

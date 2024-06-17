@@ -24,6 +24,24 @@ const ShoppingCart = () => {
   }, [cartItems]);
 
   const sendRequest = async () => {
+    const fecha = new Date();
+    // Obtenemos día, mes y año
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth() + 1; // Los meses van de 0 a 11, por eso sumamos 1
+    let año = fecha.getFullYear() % 100; // Obtenemos los últimos dos dígitos del año
+    // Formateamos los valores para asegurar que tengan dos dígitos
+    if (dia < 10) {
+      dia = '0' + dia; // Agregamos un cero adelante si el día es menor que 10
+    }
+    if (mes < 10) {
+      mes = '0' + mes; // Agregamos un cero adelante si el mes es menor que 10
+    }
+    if (año < 10) {
+      año = '0' + año; // Esto podría no ser necesario dependiendo del año actual
+    }
+    // Concatenamos los valores en el formato deseado
+    const fechaFormateada = `${dia}/${mes}/${año}`;
+
     const clienteId = 32;
     // Tu objeto JSON
     const SDTProductoItem = cartItems.map(producto => ({
@@ -48,7 +66,7 @@ const ShoppingCart = () => {
             Sdtproducto: {
               SDTProductoItem: SDTProductoItem
             },
-            Ventafechastring: '12/06/24',
+            Ventafechastring: fechaFormateada,
             Almacenorigenid: 1,
             Clientetipo: 'MI',
             Cajaid: 3,
@@ -80,8 +98,36 @@ const ShoppingCart = () => {
         xml,
         config
       );
+      let timerInterval;
+      Swal.fire({
+        title: 'Venta realizada con éxito!',
+        html: 'Nueva venta en <b></b> segundos.',
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+          const timer = Swal.getPopup().querySelector('b');
+          timerInterval = setInterval(() => {
+            const secondsLeft = Math.ceil(Swal.getTimerLeft() / 1000); // Convertir a segundos y redondear hacia arriba
+            timer.textContent = `${secondsLeft}`;
+          }, 100);
+        },
+        willClose: () => {
+          clearInterval(timerInterval);
+        }
+      }).then(result => {
+        /* Read more about handling dismissals below */
+        if (result.dismiss === Swal.DismissReason.timer) {
+          window.location.reload();
+        }
+      });
+
       // Swal.fire({
-      //   title: 'Custom width, padding, color, background.',
+      //   title: 'Venta realizada con éxito!',
+      //   showDenyButton: false,
+      //   showCancelButton: false,
+      //   confirmButtonText: 'Guardar',
+      //   denyButtonText: `Don't save`,
       //   width: 600,
       //   padding: '3em',
       //   color: '#716add',
@@ -92,32 +138,14 @@ const ShoppingCart = () => {
       //     left top
       //     no-repeat
       //   `
+      // }).then(result => {
+      //   /* Read more about isConfirmed, isDenied below */
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   } else if (result.isDenied) {
+      //     Swal.fire('Changes are not saved', '', 'info');
+      //   }
       // });
-
-      Swal.fire({
-        title: 'Venta realizada con éxito!',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Guardar',
-        denyButtonText: `Don't save`,
-        width: 600,
-        padding: '3em',
-        color: '#716add',
-        background: '#fff url(/images/trees.png)',
-        backdrop: `
-          rgba(0,0,123,0.4)
-          url("/images/nyan-cat.gif")
-          left top
-          no-repeat
-        `
-      }).then(result => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-          window.location.reload();
-        } else if (result.isDenied) {
-          Swal.fire('Changes are not saved', '', 'info');
-        }
-      });
 
       console.log(response.data);
     } catch (error) {
