@@ -1,0 +1,27 @@
+.product-padre {
+  top: -32px;
+  max-height: 74px;
+  overflow: hidden; /* Asegura que el contenido que se desborda no se muestre */
+}
+
+.product-row {
+  margin: 0;
+  top: 7px;
+  position: fixed;
+  width: 92%; /* Asegura que el ancho de la fila ocupe todo el contenedor */
+}
+
+.product-col {
+  flex: 1 0 20% !important; /* Ajusta el tamaño del col */
+  max-width: 9% !important;
+  padding: 0.5rem;
+  display: inline-block; /* Asegura que las columnas se mantengan en una línea */
+}
+
+.product-card {
+  height: 40px !important; /* Ajusta la altura de la tarjeta */
+  max-width: 150px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}

@@ -66,58 +66,58 @@ export const productData = [
       }
     ],
     files: [{ id: 1, src: product3 }]
+  },
+  {
+    name: 'Apple iPhone XS Max (4GB RAM, 512GB ROM, 12MP Main Camera)',
+    category: 'Mobile & Tabs',
+    id: 'TN000002',
+    features: [
+      '4GB RAM',
+      '512GB Internal Storage',
+      'Apple A12 Bionic (7nm)',
+      'iOS 12',
+      '3174mAh Li-Ion Battery'
+    ],
+    price: 1050,
+    discount: '',
+    salePrice: '',
+    shippingCost: 65,
+    rating: 4.5,
+    totalReview: 13,
+    favorite: 282,
+    isInStock: true,
+    isNew: false,
+    tags: ['Computer', 'Mac Book', 'Mac Book Pro', 'Laptop'],
+    shortDescription:
+      'Testing conducted by Apple in October 2018 using pre-production 2.9GHz 6‑core Intel Core i9‑based 15-inch MacBook Pro systems with Radeon Pro Vega 20 graphics, and shipping 2.9GHz 6‑core Intel Core i9‑based 15‑inch MacBook Pro systems with Radeon Pro 560X graphics, both configured with 32GB of RAM and 4TB SSD.',
+    desc: `<p>Over the years, Apple has built a reputation for releasing its products with a lot of fanfare – but that didn’t exactly happen for the MacBook Pro 2018. Rather, Apple’s latest pro laptop experienced a subdued launch, in spite of it offering a notable spec upgrade over the 2017 model – along with an improved idboard. And, as with previous generations the 15-inch MacBook Pro arrives alongside a 13-inch model.</p>
+          <p>Apple still loves the MacBook Pro though, despite the quiet release. This is because, while the iPhone XS and iPad, along with the 12-inch MacBook, are aimed at everyday consumers, the MacBook Pro has always aimed at the creative and professional audience. This new MacBook Pro brings a level of performance (and price) unlike its more consumer-oriented devices.</p>
+          <p>Still, Apple wants mainstream users to buy the MacBook Pro, too. So, if you’re just looking for the most powerful MacBook on the market, you’ll love this new MacBook Pro. Just keep in mind that, while the idboard has been updated, there are still some issues with it.</p>
+          <p>There’s enough of a difference between the two sizes when it comes to performance to warrant two separate reviews, and here we’ll be looking at how the flagship 15-inch MacBook Pro performs in 2019.</p>
+          <p>It's build quality and design is batter than elit. Numquam excepturi a debitis, sint voluptates, nam odit vel delectus id repellendus vero reprehenderit quidem totam praesentium vitae nesciunt deserunt. Sint, veniam?</p>`,
+    specification: {
+      Processor: '2.3GHz quad-core Intel Core i5',
+      Memory: '8GB of 2133MHz LPDDR3 onboard memory',
+      'Brand Name': 'Apple',
+      Model: 'Mac Book Pro',
+      Display: '13.3-inch (diagonal) LED-backlit display with IPS technology',
+      Storage: '512GB SSD',
+      Graphics: 'Intel Iris Plus Graphics 655',
+      Weight: '7.15 pounds',
+      Finish: 'Silver, Space Gray'
+    },
+    reviews: [
+      {
+        id: 1,
+        title: 'Outstanding Design, Awesome Support',
+        rating: 4.5,
+        author: 'Liane',
+        date: 'December 14, 2019',
+        text: 'This really is an amazing template - from the style to the font - clean layout. SO worth the money! The demo pages show off what Bootstrap 4 can impressively do. Great template!! Support response is FAST and the team is amazing - communication is important.'
+      }
+    ],
+    files: [{ id: 1, src: product4 }]
   }
-  // {
-  //   name: 'Apple iPhone XS Max (4GB RAM, 512GB ROM, 12MP Main Camera)',
-  //   category: 'Mobile & Tabs',
-  //   id: 'TN000002',
-  //   features: [
-  //     '4GB RAM',
-  //     '512GB Internal Storage',
-  //     'Apple A12 Bionic (7nm)',
-  //     'iOS 12',
-  //     '3174mAh Li-Ion Battery'
-  //   ],
-  //   price: 1050,
-  //   discount: '',
-  //   salePrice: '',
-  //   shippingCost: 65,
-  //   rating: 4.5,
-  //   totalReview: 13,
-  //   favorite: 282,
-  //   isInStock: true,
-  //   isNew: false,
-  //   tags: ['Computer', 'Mac Book', 'Mac Book Pro', 'Laptop'],
-  //   shortDescription:
-  //     'Testing conducted by Apple in October 2018 using pre-production 2.9GHz 6‑core Intel Core i9‑based 15-inch MacBook Pro systems with Radeon Pro Vega 20 graphics, and shipping 2.9GHz 6‑core Intel Core i9‑based 15‑inch MacBook Pro systems with Radeon Pro 560X graphics, both configured with 32GB of RAM and 4TB SSD.',
-  //   desc: `<p>Over the years, Apple has built a reputation for releasing its products with a lot of fanfare – but that didn’t exactly happen for the MacBook Pro 2018. Rather, Apple’s latest pro laptop experienced a subdued launch, in spite of it offering a notable spec upgrade over the 2017 model – along with an improved idboard. And, as with previous generations the 15-inch MacBook Pro arrives alongside a 13-inch model.</p>
-  //         <p>Apple still loves the MacBook Pro though, despite the quiet release. This is because, while the iPhone XS and iPad, along with the 12-inch MacBook, are aimed at everyday consumers, the MacBook Pro has always aimed at the creative and professional audience. This new MacBook Pro brings a level of performance (and price) unlike its more consumer-oriented devices.</p>
-  //         <p>Still, Apple wants mainstream users to buy the MacBook Pro, too. So, if you’re just looking for the most powerful MacBook on the market, you’ll love this new MacBook Pro. Just keep in mind that, while the idboard has been updated, there are still some issues with it.</p>
-  //         <p>There’s enough of a difference between the two sizes when it comes to performance to warrant two separate reviews, and here we’ll be looking at how the flagship 15-inch MacBook Pro performs in 2019.</p>
-  //         <p>It's build quality and design is batter than elit. Numquam excepturi a debitis, sint voluptates, nam odit vel delectus id repellendus vero reprehenderit quidem totam praesentium vitae nesciunt deserunt. Sint, veniam?</p>`,
-  //   specification: {
-  //     Processor: '2.3GHz quad-core Intel Core i5',
-  //     Memory: '8GB of 2133MHz LPDDR3 onboard memory',
-  //     'Brand Name': 'Apple',
-  //     Model: 'Mac Book Pro',
-  //     Display: '13.3-inch (diagonal) LED-backlit display with IPS technology',
-  //     Storage: '512GB SSD',
-  //     Graphics: 'Intel Iris Plus Graphics 655',
-  //     Weight: '7.15 pounds',
-  //     Finish: 'Silver, Space Gray'
-  //   },
-  //   reviews: [
-  //     {
-  //       id: 1,
-  //       title: 'Outstanding Design, Awesome Support',
-  //       rating: 4.5,
-  //       author: 'Liane',
-  //       date: 'December 14, 2019',
-  //       text: 'This really is an amazing template - from the style to the font - clean layout. SO worth the money! The demo pages show off what Bootstrap 4 can impressively do. Great template!! Support response is FAST and the team is amazing - communication is important.'
-  //     }
-  //   ],
-  //   files: [{ id: 1, src: product4 }]
-  // },
   // {
   //   name: 'Apple MacBook Pro (15" Retina, Touch Bar, 2.2GHz 6-Core Intel Core i7, 16GB RAM, 256GB SSD) - Space Gray (Latest Model)',
   //   category: 'Computer & Accessories',

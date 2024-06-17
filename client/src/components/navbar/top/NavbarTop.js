@@ -96,7 +96,7 @@ const NavbarTopElements = ({
   const burgerMenuRef = useRef();
   return (
     <>
-      <Navbar.Toggle
+      {/* <Navbar.Toggle
         ref={burgerMenuRef}
         className={classNames('toggle-icon-wrapper me-md-3 me-2', {
           'd-lg-none':
@@ -115,11 +115,9 @@ const NavbarTopElements = ({
             <span className="toggle-line" />
           </span>
         </button>
-      </Navbar.Toggle>
+      </Navbar.Toggle> */}
 
-      <Logo at="navbar-top" textClass="text-primary" width={40} id="topLogo" />
-
-      {navbarPosition === 'top' || navbarPosition === 'combo' ? (
+      {/* {navbarPosition === 'top' || navbarPosition === 'combo' ? (
         <Navbar.Collapse
           in={navbarCollapsed}
           className="scrollbar pb-3 pb-lg-0"
@@ -138,8 +136,23 @@ const NavbarTopElements = ({
             <SearchBox autoCompleteItem={autoCompleteInitialItem} />
           </Nav.Item>
         </Nav>
-      )}
-      <TopNavRightSideNavItem />
+      )} */}
+      <div className="d-flex align-items-center">
+        <Logo
+          at="navbar-top"
+          textClass="text-primary"
+          width={40}
+          id="topLogo"
+        />
+        {/* <Logo at="navbar-top" width={58} /> */}
+        <div className="flex-grow-1">
+          <TopNavRightSideNavItem />
+          {/* <TopProducts
+            products={products}
+            productsDispatch={productsDispatch}
+          /> */}
+        </div>
+      </div>
     </>
   );
 };
