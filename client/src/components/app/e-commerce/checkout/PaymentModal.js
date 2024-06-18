@@ -146,7 +146,7 @@ const PaymentModal = ({
             </Row>
           </Col>
           <Col>
-            <Table bordered className="numeric-keypad">
+            <Table bordered>
               <tbody>
                 {buttonsPago.map((row, rowIndex) => (
                   <tr key={rowIndex}>
@@ -155,6 +155,7 @@ const PaymentModal = ({
                         <Button
                           variant="light"
                           className="fixed-width-button"
+                          style={{ height: '70px' }}
                           onClick={() => {
                             if (typeof label === 'number') {
                               onNumberClickModal(label);

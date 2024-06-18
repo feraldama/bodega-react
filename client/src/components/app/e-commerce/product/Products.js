@@ -200,6 +200,7 @@ const Products = () => {
         html: 'Nueva venta en <b></b> segundos.',
         timer: 3000,
         timerProgressBar: true,
+        width: '90%',
         didOpen: () => {
           Swal.showLoading();
           const timer = Swal.getPopup().querySelector('b');
@@ -234,7 +235,7 @@ const Products = () => {
             overflowY: 'auto'
           }}
         >
-          <ShoppingCart />
+          <ShoppingCart handleShow={handleShow} />
         </Card>
         <Card
           style={{
