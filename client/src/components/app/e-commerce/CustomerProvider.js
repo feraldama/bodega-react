@@ -14,7 +14,7 @@ const CustomerProvider = ({ children }) => {
   const initData = {
     initCustomers: customersData,
     customers: customersData,
-    selectedCustomer: null
+    selectedCustomer: customersData[0]
   };
   const [customersState, customersDispatch] = useReducer(
     customerReducer,

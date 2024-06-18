@@ -10,7 +10,8 @@ const AdvanceTable = ({
   headerClassName,
   bodyClassName,
   rowClassName,
-  tableProps
+  tableProps,
+  handleCustomerModalClose
 }) => {
   return (
     <div className="table-responsive scrollbar">
@@ -48,12 +49,17 @@ const AdvanceTable = ({
           {page.map((row, i) => {
             prepareRow(row);
             return (
-              <tr key={i} className={rowClassName} {...row.getRowProps()}>
+              <tr
+                key={i}
+                className={`${rowClassName} table-hover-line`}
+                {...row.getRowProps()}
+              >
                 {row.cells.map((cell, index) => {
                   return (
                     <td
                       key={index}
                       {...cell.getCellProps(cell.column.cellProps)}
+                      onClick={() => handleCustomerModalClose(row.original)}
                     >
                       {cell.render('Cell')}
                     </td>

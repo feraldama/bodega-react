@@ -1,0 +1,14 @@
+/*  AGREGUE YO  */
+.table-hover-line:hover {
+  background-color: #cce6ff; /* Cambia esto según el estilo de hover que desees */
+}
+
+.accionesZoom {
+  cursor: pointer;
+  height: 20px;
+  width: 55px !important;
+}
+
+.accionesZoom:hover {
+  transform: scale(1.1); /* Aumenta el tamaño del elemento en un 10% */
+}

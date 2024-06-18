@@ -20,7 +20,7 @@ export const AdvanceTableFooter = ({
   perPage,
   rowsPerPageSelection,
   navButtons,
-  rowsPerPageOptions = [5, 10, 15],
+  rowsPerPageOptions = [5, 10, 15, 30, 50],
   className
 }) => {
   const [isAllVisible, setIsAllVisible] = useState(false);
@@ -86,7 +86,7 @@ export const AdvanceTableFooter = ({
             onClick={() => previousPage()}
             className={classNames({ disabled: !canPreviousPage })}
           >
-            Previous
+            Anterior
           </Button>
           <Button
             size="sm"
@@ -96,7 +96,7 @@ export const AdvanceTableFooter = ({
             })}
             onClick={() => nextPage()}
           >
-            Next
+            Siguiente
           </Button>
         </Flex>
       )}

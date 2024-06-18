@@ -47,7 +47,9 @@ const Products = () => {
   const [pagoTipo, setPagoTipo] = useState('E');
   const [showModal, setShowModal] = useState(false);
   const [showCustomerModal, setShowCustomerModal] = useState(false);
-  const [cliente, setCliente] = useState('Cliente');
+  const [cliente, setCliente] = useState(
+    selectedCustomer.ClienteNombre + ' ' + selectedCustomer.ClienteApellido
+  );
   const [efectivo, setEfectivo] = useState(0);
   const [banco, setBanco] = useState(0);
   const [cuentaCliente, setCuentaCliente] = useState(0);

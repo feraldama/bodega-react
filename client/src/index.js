@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import Main from './Main';
 import 'helpers/initFA';
+import './assets/customTheme.css';
 
 const container = document.getElementById('main');
 const root = createRoot(container);
