@@ -5,6 +5,7 @@ import NavbarTop from 'components/navbar/top/NavbarTop';
 import NavbarVertical from 'components/navbar/vertical/NavbarVertical';
 import Footer from 'components/footer/Footer';
 import ProductProvider from 'components/app/e-commerce/ProductProvider';
+import CustomerProvider from 'components/app/e-commerce/CustomerProvider';
 import CourseProvider from 'components/app/e-learning/CourseProvider';
 import ModalAuth from 'components/authentication/modal/ModalAuth';
 
@@ -40,16 +41,18 @@ const MainLayout = () => {
       {/* {(navbarPosition === 'vertical' || navbarPosition === 'combo') && (
         <NavbarVertical />
       )} */}
-      <ProductProvider>
-        <CourseProvider>
-          <div className={classNames('content', { 'pb-0': isKanban })}>
-            <NavbarTop />
-            {/*------ Main Routes ------*/}
-            <Outlet />
-            {!isKanban && <Footer />}
-          </div>
-        </CourseProvider>
-      </ProductProvider>
+      <CustomerProvider>
+        <ProductProvider>
+          <CourseProvider>
+            <div className={classNames('content', { 'pb-0': isKanban })}>
+              <NavbarTop />
+              {/*------ Main Routes ------*/}
+              <Outlet />
+              {!isKanban && <Footer />}
+            </div>
+          </CourseProvider>
+        </ProductProvider>
+      </CustomerProvider>
       <ModalAuth />
     </div>
   );

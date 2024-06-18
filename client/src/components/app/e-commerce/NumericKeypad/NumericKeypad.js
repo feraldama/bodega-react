@@ -10,7 +10,7 @@ import {
   Modal
 } from 'react-bootstrap';
 import './NumericKeypad.css';
-import { ProductContext } from 'context/Context';
+import { ProductContext, CustomerContext } from 'context/Context';
 import { getSubtotal } from 'helpers/utils';
 import axios from 'axios';
 import { js2xml } from 'xml-js';
@@ -49,6 +49,11 @@ const NumericKeypad = ({ onNumberClick }) => {
     productsState: { selectedProductId, cartItems },
     productsDispatch
   } = useContext(ProductContext);
+
+  const {
+    customersState: { customers },
+    customersDispatch
+  } = useContext(CustomerContext);
 
   const onNumberClickModal = label => {
     let efe = 0;

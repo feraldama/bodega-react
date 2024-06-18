@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import ProductList from './ProductList';
 import ProductGrid from './ProductGrid';
-import { ProductContext } from 'context/Context';
+import { ProductContext, CustomerContext } from 'context/Context';
 import usePagination from 'hooks/usePagination';
 import ShoppingCart from 'components/app/e-commerce/cart/ShoppingCart';
 import Flex from 'components/common/Flex';
@@ -25,6 +25,12 @@ const Products = () => {
     productsState: { products, selectedProductId, cartItems },
     productsDispatch
   } = useContext(ProductContext);
+
+  // const {
+  //   customersState: { customers },
+  //   customersDispatch
+  // } = useContext(CustomerContext);
+  // console.log('log: 🚀  customers:', customers);
 
   const [sortBy, setSortBy] = useState('id');
   const [isAsc, setIsAsc] = useState(true);
