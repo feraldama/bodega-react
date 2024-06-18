@@ -112,10 +112,10 @@ const NumericKeypad = ({ onNumberClick }) => {
       totalResto = totalCost - banco - cuentaCliente;
       setEfectivo(0);
     } else if (pagoTipo == 'B') {
-      totalResto = totalCost - banco;
+      totalResto = totalCost - efectivo - cuentaCliente;
       setBanco(0);
     } else {
-      totalResto = totalCost - cuentaCliente;
+      totalResto = totalCost - efectivo - banco;
       setCuentaCliente(0);
     }
     setTotalRest(totalResto);
