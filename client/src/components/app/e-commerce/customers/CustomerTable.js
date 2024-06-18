@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 
-const AdvanceTable = ({
+const CustomerTable = ({
   getTableProps,
   headers,
   page,
@@ -10,7 +10,8 @@ const AdvanceTable = ({
   headerClassName,
   bodyClassName,
   rowClassName,
-  tableProps
+  tableProps,
+  handleCustomerModalClose
 }) => {
   return (
     <div className="table-responsive scrollbar">
@@ -48,12 +49,17 @@ const AdvanceTable = ({
           {page.map((row, i) => {
             prepareRow(row);
             return (
-              <tr key={i} className={rowClassName} {...row.getRowProps()}>
+              <tr
+                key={i}
+                className={`${rowClassName} table-hover-line`}
+                {...row.getRowProps()}
+              >
                 {row.cells.map((cell, index) => {
                   return (
                     <td
                       key={index}
                       {...cell.getCellProps(cell.column.cellProps)}
+                      onClick={() => handleCustomerModalClose(row.original)}
                     >
                       {cell.render('Cell')}
                     </td>
@@ -67,7 +73,7 @@ const AdvanceTable = ({
     </div>
   );
 };
-AdvanceTable.propTypes = {
+CustomerTable.propTypes = {
   getTableProps: PropTypes.func,
   headers: PropTypes.array,
   page: PropTypes.array,
@@ -78,4 +84,4 @@ AdvanceTable.propTypes = {
   tableProps: PropTypes.object
 };
 
-export default AdvanceTable;
+export default CustomerTable;

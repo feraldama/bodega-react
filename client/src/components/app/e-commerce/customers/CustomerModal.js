@@ -8,9 +8,9 @@ import {
   Form,
   Row
 } from 'react-bootstrap';
-import AdvanceTableWrapper from 'components/common/advance-table/AdvanceTableWrapper';
-import AdvanceTable from 'components/common/advance-table/AdvanceTable';
-import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFooter';
+import CustomerTableWrapper from './CustomerTableWrapper';
+import CustomerTable from './CustomerTable';
+import CustomerTableFooter from './CustomerTableFooter';
 import TextSearchFilter from 'components/common/advance-table/TextSearchFilter';
 import { CustomerContext } from 'context/Context';
 import Swal from 'sweetalert2';
@@ -129,7 +129,7 @@ const CustomerModal = ({ show, handleClose, setCliente }) => {
                     </div>
                   )
                 ) : (
-                  <AdvanceTableWrapper
+                  <CustomerTableWrapper
                     columns={columns}
                     data={customers}
                     sortable
@@ -146,7 +146,7 @@ const CustomerModal = ({ show, handleClose, setCliente }) => {
                     </Col>
                   </Row> */}
                     {/* <BulAction table /> */}
-                    <AdvanceTable
+                    <CustomerTable
                       table
                       headerClassName="bg-200 text-nowrap align-middle"
                       rowClassName="align-middle white-space-nowrap"
@@ -157,7 +157,7 @@ const CustomerModal = ({ show, handleClose, setCliente }) => {
                       handleCustomerModalClose={handleCustomerModalClose}
                     />
                     <div className="mt-3">
-                      <AdvanceTableFooter
+                      <CustomerTableFooter
                         rowCount={customers.length}
                         table
                         rowInfo
@@ -165,7 +165,7 @@ const CustomerModal = ({ show, handleClose, setCliente }) => {
                         rowsPerPageSelection
                       />
                     </div>
-                  </AdvanceTableWrapper>
+                  </CustomerTableWrapper>
                 )}
               </Col>
             </Row>

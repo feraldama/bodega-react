@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import Flex from '../Flex';
+import Flex from 'components/common/Flex';
 
-export const AdvanceTableFooter = ({
+export const CustomerTableFooter = ({
   page,
   pageSize,
   pageIndex,
@@ -20,7 +20,7 @@ export const AdvanceTableFooter = ({
   perPage,
   rowsPerPageSelection,
   navButtons,
-  rowsPerPageOptions = [5, 10, 15],
+  rowsPerPageOptions = [5, 10, 15, 30, 50],
   className
 }) => {
   const [isAllVisible, setIsAllVisible] = useState(false);
@@ -86,7 +86,7 @@ export const AdvanceTableFooter = ({
             onClick={() => previousPage()}
             className={classNames({ disabled: !canPreviousPage })}
           >
-            Previous
+            Anterior
           </Button>
           <Button
             size="sm"
@@ -96,7 +96,7 @@ export const AdvanceTableFooter = ({
             })}
             onClick={() => nextPage()}
           >
-            Next
+            Siguiente
           </Button>
         </Flex>
       )}
@@ -104,4 +104,4 @@ export const AdvanceTableFooter = ({
   );
 };
 
-export default AdvanceTableFooter;
+export default CustomerTableFooter;
