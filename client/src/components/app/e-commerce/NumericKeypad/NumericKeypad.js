@@ -22,7 +22,9 @@ const NumericKeypad = ({ onNumberClick }) => {
   const [ventaTipo, setVentaTipo] = useState('CO');
   const [pagoTipo, setPagoTipo] = useState('E');
   const [showModal, setShowModal] = useState(false);
+  const [showCustomerModal, setShowCustomerModal] = useState(false); // Nuevo estado para el modal de clientes
   const [cliente, setCliente] = useState('Cliente');
+  const [searchTerm, setSearchTerm] = useState(''); // Nuevo estado para el filtro de búsqueda
 
   const [efectivo, setEfectivo] = useState(0);
   const [banco, setBanco] = useState(0);
@@ -30,6 +32,16 @@ const NumericKeypad = ({ onNumberClick }) => {
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+  const handleCustomerModalShow = () => setShowCustomerModal(true);
+  const handleCustomerModalClose = customer => {
+    setShowCustomerModal(false);
+    if (customer && customer.ClienteId) {
+      customersDispatch({
+        type: 'SET_CUSTOMER',
+        payload: { selectedCustomer: customer }
+      });
+    }
+  };
 
   const buttons = [
     [1, 2, 3, 'Cant.'],
@@ -51,7 +63,7 @@ const NumericKeypad = ({ onNumberClick }) => {
   } = useContext(ProductContext);
 
   const {
-    customersState: { customers },
+    customersState: { customers, selectedCustomer },
     customersDispatch
   } = useContext(CustomerContext);
 
@@ -62,13 +74,11 @@ const NumericKeypad = ({ onNumberClick }) => {
     let totalResto = 0;
     if (pagoTipo == 'E') {
       efe = efectivo == 0 ? `${label}` : `${efectivo}${label}`;
-      console.log('log: 🚀  efe:', efe);
       totalResto = totalCost - efe - banco - cuentaCliente;
       setEfectivo(efe);
     } else if (pagoTipo == 'B') {
       ban = banco == 0 ? `${label}` : `${banco}${label}`;
       totalResto = totalCost - efectivo - ban - cuentaCliente;
-      console.log('log: 🚀  ban:', ban);
       setBanco(ban);
     } else {
       cuentaCli = cuentaCliente == 0 ? `${label}` : `${cuentaCliente}${label}`;
@@ -112,9 +122,6 @@ const NumericKeypad = ({ onNumberClick }) => {
   };
 
   useEffect(() => {
-    // const formattedTotalCost = new Intl.NumberFormat('es-ES').format(
-    //   getSubtotal(cartItems)
-    // );
     setTotalRest(getSubtotal(cartItems));
     setTotalCost(getSubtotal(cartItems));
   }, [cartItems]);
@@ -124,16 +131,12 @@ const NumericKeypad = ({ onNumberClick }) => {
     let dia = fecha.getDate();
     let mes = fecha.getMonth() + 1;
     let año = fecha.getFullYear() % 100;
-
     if (dia < 10) dia = '0' + dia;
     if (mes < 10) mes = '0' + mes;
     if (año < 10) año = '0' + año;
-
     const fechaFormateada = `${dia}/${mes}/${año}`;
-
-    const clienteId = 32;
     const SDTProductoItem = cartItems.map(producto => ({
-      ClienteId: clienteId,
+      ClienteId: selectedCustomer.ClienteId,
       Producto: {
         ProductoId: producto.id,
         VentaProductoCantidad: producto.quantity,
@@ -144,7 +147,6 @@ const NumericKeypad = ({ onNumberClick }) => {
         ComboPrecio: 0
       }
     }));
-
     const json = {
       Envelope: {
         _attributes: { xmlns: 'http://schemas.xmlsoap.org/soap/envelope/' },
@@ -163,7 +165,7 @@ const NumericKeypad = ({ onNumberClick }) => {
             Total2: getSubtotal(cartItems),
             Ventatipo: ventaTipo,
             Pagotipo: 'E',
-            Clienteid: 32,
+            Clienteid: selectedCustomer.ClienteId,
             Efectivoreact: efectivo,
             Bancoreact: banco,
             Clientecuentareact: cuentaCliente
@@ -171,15 +173,12 @@ const NumericKeypad = ({ onNumberClick }) => {
         }
       }
     };
-
     const xml = js2xml(json, { compact: true, ignoreComment: true, spaces: 4 });
-
     const config = {
       headers: {
         'Content-Type': 'text/xml'
       }
     };
-
     try {
       const response = await axios.post(
         process.env.REACT_APP_URL +
@@ -209,12 +208,15 @@ const NumericKeypad = ({ onNumberClick }) => {
           window.location.reload();
         }
       });
-
       console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const filteredCustomers = customers.filter(customer =>
+    customer.ClienteNombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
@@ -234,19 +236,6 @@ const NumericKeypad = ({ onNumberClick }) => {
         <tbody>
           {buttons.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {/* {rowIndex === 0 && (
-                <td rowSpan="1" className="p-1">
-                  <Button
-                    variant="light"
-                    className="w-100 h-100"
-                    onClick={() => {
-                      console.log('log: 🚀 Cliente:');
-                    }}
-                  >
-                    {cliente}
-                  </Button>
-                </td>
-              )} */}
               {rowIndex === 0 && (
                 <td rowSpan="4" className="p-1">
                   <Button
@@ -262,7 +251,6 @@ const NumericKeypad = ({ onNumberClick }) => {
                 <td key={colIndex} className="p-1">
                   <Button
                     variant="light"
-                    // className="w-100 h-100"
                     style={{ width: '100%' }}
                     onClick={() => {
                       if (typeof label === 'number') {
@@ -281,7 +269,7 @@ const NumericKeypad = ({ onNumberClick }) => {
                         } else if (label === 'Borrar') {
                           cerarCantidad();
                         } else if (label === 'Cliente') {
-                          console.log('log: 🚀 Cliente:');
+                          handleCustomerModalShow();
                         }
                       }
                     }}
@@ -297,7 +285,7 @@ const NumericKeypad = ({ onNumberClick }) => {
               <Button
                 variant="light"
                 className="w-100 h-100 fixed-width-button"
-                onClick={() => cerarCantidadModal()}
+                onClick={handleCustomerModalShow}
               >
                 {cliente}
               </Button>
@@ -451,6 +439,60 @@ const NumericKeypad = ({ onNumberClick }) => {
           </Button>
           <Button variant="primary" onClick={sendRequest}>
             Validar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal de Clientes */}
+      <Modal
+        show={showCustomerModal}
+        onHide={handleCustomerModalClose}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Seleccione un cliente</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group className="mb-3" controlId="searchCustomer">
+            <Form.Label>Buscar cliente</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Ingrese el nombre del cliente"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+          </Form.Group>
+          <Table bordered>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCustomers.map((customer, index) => (
+                <tr
+                  key={index}
+                  onClick={() => {
+                    setCliente(
+                      customer.ClienteNombre + ' ' + customer.ClienteApellido
+                    );
+                    handleCustomerModalClose(customer);
+                  }}
+                >
+                  <td>{customer.ClienteId}</td>
+                  <td>{customer.ClienteNombre}</td>
+                  <td>{customer.ClienteApellido}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCustomerModalClose}>
+            Cancelar
           </Button>
         </Modal.Footer>
       </Modal>
