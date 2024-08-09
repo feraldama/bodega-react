@@ -15,6 +15,11 @@ export const productReducer = (state, action) => {
         ...state,
         products: payload.products
       };
+    case 'SET_PRODUCTS_COMBOS':
+      return {
+        ...state,
+        productsCombos: payload.productsCombos
+      };
     case 'SORT_PRODUCT':
       return {
         ...state,

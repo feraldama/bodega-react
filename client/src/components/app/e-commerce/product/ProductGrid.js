@@ -23,6 +23,7 @@ const ProductGrid = ({ product, ...rest }) => {
   } = product;
 
   const formattedPrice = new Intl.NumberFormat('es-ES').format(price);
+  const formattedSalePrice = new Intl.NumberFormat('es-ES').format(salePrice);
   const { productsDispatch } = useContext(ProductContext);
 
   const { handleAddToCart, handleFavouriteClick } = useProductHook(product);
@@ -63,9 +64,9 @@ const ProductGrid = ({ product, ...rest }) => {
               </Link>
             </p>
             <h5 className="fs-md-7 text-warning mb-0 d-flex align-items-center mb-3">
-              {`Gs. ${salePrice ? salePrice : formattedPrice}`}
+              {`Gs. ${salePrice ? formattedSalePrice : formattedPrice}`}
               {salePrice && (
-                <del className="ms-2 fs-10 text-500">Gs. {price}</del>
+                <h1 className="ms-2 fs-10 text-500">{formattedPrice}</h1>
               )}
             </h5>
 

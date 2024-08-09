@@ -11,6 +11,7 @@ const ProductProvider = ({ children }) => {
   const initData = {
     initProducts: productData,
     products: productData,
+    // productsCombos: [],
     cartItems: [
       // {
       //   ...productosBD[0],
@@ -100,6 +101,18 @@ const ProductProvider = ({ children }) => {
       ],
       files: [{ id: 1, src: product3 }]
     };
+
+    axios
+      .get(process.env.REACT_APP_API_URL + '/api/productos/combos')
+      .then(function (response) {
+        productsDispatch({
+          type: 'SET_PRODUCTS_COMBOS',
+          payload: { productsCombos: response.data }
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     axios
       .get(process.env.REACT_APP_API_URL + '/api/productos')

@@ -25,7 +25,7 @@ const productoModel = sequelize.define(
     ProductoCodigo: Sequelize.BIGINT,
     name: { type: Sequelize.STRING, field: "ProductoNombre" },
     price: { type: Sequelize.BIGINT, field: "ProductoPrecioVenta" },
-    // salePrice: { type: Sequelize.BIGINT, field: "ProductoPrecioVenta" },
+    salePrice: { type: Sequelize.BIGINT, field: "ProductoPrecioUnitario" },
     ProductoPrecioUnitario: Sequelize.BIGINT,
     ProductoPrecioPromedio: Sequelize.BIGINT,
     ProductoStock: Sequelize.MEDIUMINT,

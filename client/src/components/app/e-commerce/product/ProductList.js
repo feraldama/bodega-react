@@ -27,6 +27,9 @@ const ProductList = ({ product, index, searchInputRef }) => {
 
   const { productsDispatch } = useContext(ProductContext);
 
+  const formattedPrice = new Intl.NumberFormat('es-ES').format(price);
+  const formattedSalePrice = new Intl.NumberFormat('es-ES').format(salePrice);
+
   const { handleAddToCart, handleFavouriteClick } = useProductHook(product);
 
   const handleAddToCartAndFocus = () => {
@@ -82,12 +85,11 @@ const ProductList = ({ product, index, searchInputRef }) => {
               <Col lg={4} as={Flex} justifyContent="between" direction="column">
                 <div>
                   <h4 className="fs-8 fs-md-7 text-warning mb-0">
-                    {`Gs. ${salePrice ? salePrice : price}`}
+                    {`Gs. ${salePrice ? formattedSalePrice : formattedPrice}`}
                   </h4>
                   {salePrice && (
                     <h5 className="fs-10 text-500 mb-0 mt-1">
-                      <del>{`Gs. ${price}`}</del>
-                      <span className="ms-2">-{discount}%</span>
+                      <p>{`${formattedPrice}`}</p>
                     </h5>
                   )}
 

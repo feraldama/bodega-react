@@ -1,18 +1,31 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Form } from 'react-bootstrap';
 import useProductHook from '../product/useProductHook';
 import { ProductContext } from 'context/Context';
 import QuantityController from '../QuantityController';
 import { Buffer } from 'buffer';
 
 const CartItem = ({ product }) => {
-  const { id, files, name, quantity, totalPrice, price, ProductoImagen } =
-    product;
-  const formattedTotalPrice = new Intl.NumberFormat('es-ES').format(
-    price * quantity
+  const {
+    id,
+    files,
+    name,
+    quantity,
+    totalPrice,
+    price,
+    salePrice,
+    ProductoImagen
+  } = product;
+  const [useSalePrice, setUseSalePrice] = useState(false);
+
+  const formattedPrice = new Intl.NumberFormat('es-ES').format(
+    useSalePrice ? price : salePrice
   );
-  const formattedPrice = new Intl.NumberFormat('es-ES').format(price);
+  const formattedTotalPrice = new Intl.NumberFormat('es-ES').format(
+    useSalePrice ? price * quantity : salePrice * quantity
+  );
+
   const { handleAddToCart } = useProductHook(product);
 
   const {
@@ -30,17 +43,37 @@ const CartItem = ({ product }) => {
   };
 
   const handleIncrease = () => {
-    handleAddToCart(parseInt(quantity + 1));
+    handleAddToCart(
+      parseInt(quantity + 1),
+      useSalePrice ? price : salePrice,
+      useSalePrice ? 'C' : 'U'
+    );
   };
 
   const handleDecrease = () => {
     if (quantity > 0) {
-      handleAddToCart(parseInt(quantity - 1));
+      handleAddToCart(
+        parseInt(quantity - 1),
+        useSalePrice ? price : salePrice,
+        useSalePrice ? 'C' : 'U'
+      );
     }
   };
 
   const handleChange = e => {
-    handleAddToCart(parseInt(e.target.value < 1 ? 0 : e.target.value));
+    handleAddToCart(
+      parseInt(e.target.value < 1 ? 0 : e.target.value),
+      useSalePrice ? price : salePrice,
+      useSalePrice ? 'C' : 'U'
+    );
+  };
+
+  const handleChangeSalePrice = () => {
+    handleAddToCart(
+      parseInt(quantity),
+      useSalePrice ? price : salePrice,
+      useSalePrice ? 'C' : 'U'
+    );
   };
 
   const productoSeleccionado = e => {
@@ -53,6 +86,14 @@ const CartItem = ({ product }) => {
       payload: { id }
     });
   };
+
+  const handleCheckboxChange = () => {
+    setUseSalePrice(!useSalePrice);
+  };
+
+  useEffect(() => {
+    handleChangeSalePrice();
+  }, [useSalePrice]);
 
   useEffect(() => {
     if (quantityInputRef.current) {
@@ -114,6 +155,19 @@ const CartItem = ({ product }) => {
                 handleDecrease={handleDecrease}
                 btnClassName="px-2"
               />
+              <Col
+                md={{ span: 4, order: 1 }}
+                xs={{ order: 0 }}
+                className="d-flex justify-content-end align-items-center"
+              >
+                <Form.Check
+                  type="checkbox"
+                  label="Caja"
+                  checked={useSalePrice}
+                  onChange={handleCheckboxChange}
+                  style={{ marginBottom: 0 }}
+                />
+              </Col>
             </div>
           </Col>
           <Col

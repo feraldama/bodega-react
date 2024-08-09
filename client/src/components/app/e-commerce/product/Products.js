@@ -28,7 +28,7 @@ import Swal from 'sweetalert2';
 
 const Products = () => {
   const {
-    productsState: { products, selectedProductId, cartItems },
+    productsState: { products, selectedProductId, cartItems, productsCombos },
     productsDispatch
   } = useContext(ProductContext);
 
@@ -148,9 +148,10 @@ const Products = () => {
       Producto: {
         ProductoId: producto.id,
         VentaProductoCantidad: producto.quantity,
-        ProductoPrecioVenta: producto.price,
-        ProductoUnidad: 'U',
-        VentaProductoPrecioTotal: producto.quantity * producto.price,
+        ProductoPrecioVenta:
+          producto.unidad == 'U' ? producto.salePrice : producto.price,
+        ProductoUnidad: producto.unidad,
+        VentaProductoPrecioTotal: producto.totalPrice,
         Combo: 'N',
         ComboPrecio: 0
       }
@@ -190,7 +191,8 @@ const Products = () => {
     try {
       const response = await axios.post(
         process.env.REACT_APP_URL +
-          ':8080/AlonsoBodega/servlet/com.alonso.apventaconfirmarws',
+          process.env.REACT_APP_URL_GENEXUS +
+          'apventaconfirmarws',
         xml,
         config
       );

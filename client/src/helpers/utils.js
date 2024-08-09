@@ -178,7 +178,8 @@ export const getTotalPrice = (cart, baseItems) =>
     return accumulator + calculateSale(price, sale) * quantity;
   }, 0);
 export const getSubtotal = items =>
-  items.reduce((acc, curr) => curr.price * curr.quantity + acc, 0);
+  items.reduce((acc, curr) => curr.totalPrice + acc, 0);
+// items.reduce((acc, curr) => curr.price * curr.quantity + acc, 0);
 export const getDiscountPrice = (total, discount) =>
   total - total * (discount / 100);
 

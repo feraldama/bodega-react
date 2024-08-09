@@ -48,10 +48,7 @@ const NumericKeypad = ({
             </Col>
             <Col xs={4} md={3} className="text-end py-2 text-nowrap px-x1">
               {`Gs. ${new Intl.NumberFormat('es-ES').format(
-                cartItems.reduce(
-                  (sum, item) => sum + item.quantity * item.price,
-                  0
-                )
+                cartItems.reduce((sum, item) => sum + item.totalPrice, 0)
               )}`}
             </Col>
           </Row>
