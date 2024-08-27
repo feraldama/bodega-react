@@ -33,7 +33,7 @@ const ProductList = ({ product, index }) => {
   const { handleAddToCart, handleFavouriteClick } = useProductHook(product);
 
   const handleAddToCartAndFocus = () => {
-    handleAddToCart(1, true, true, true);
+    handleAddToCart(0, true, true);
     productsDispatch({
       type: 'UPDATE_SELECTED_PRODID',
       payload: { id }
