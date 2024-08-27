@@ -74,7 +74,7 @@ const Products = () => {
     setItemsPerPage
   } = usePagination(filteredProducts, productPerPage);
 
-  const searchInputRef = useRef(null);
+  const searchinputref = useRef(null);
 
   useEffect(() => {
     productsDispatch({
@@ -93,14 +93,14 @@ const Products = () => {
   }, [isList, isGrid, navigate]);
 
   useEffect(() => {
-    if (searchInputRef.current) {
-      searchInputRef.current.focus();
+    if (searchinputref.current) {
+      searchinputref.current.focus();
     }
   }, []);
 
   const handleFocus = () => {
-    if (searchInputRef.current) {
-      searchInputRef.current.select();
+    if (searchinputref.current) {
+      searchinputref.current.select();
     }
   };
 
@@ -270,7 +270,7 @@ const Products = () => {
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   style={{ maxWidth: '12.5rem' }}
-                  ref={searchInputRef}
+                  ref={searchinputref}
                   onFocus={handleFocus}
                 />
                 <Form.Select
@@ -371,7 +371,6 @@ const Products = () => {
                         product={product}
                         key={product.id}
                         index={index}
-                        searchInputRef={searchInputRef}
                       />
                     ) : (
                       <ProductGrid
@@ -380,7 +379,6 @@ const Products = () => {
                         md={5}
                         lg={3}
                         index={index}
-                        searchInputRef={searchInputRef}
                       />
                     )
                   )}

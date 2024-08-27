@@ -9,7 +9,7 @@ const useProductHook = product => {
     isInFavouriteItems
   } = useContext(ProductContext);
 
-  const handleAddToCart = (quantity, price, useSalePrice, add) => {
+  const handleAddToCart = (quantity, price, useSalePrice, addTouch) => {
     if (isInShoppingCart(product.id)) {
       const cartProduct = cartItems.find(item => item.id === product.id);
       productsDispatch({
@@ -17,7 +17,7 @@ const useProductHook = product => {
         payload: {
           product: {
             ...cartProduct,
-            quantity: add ? cartProduct.quantity + quantity : quantity,
+            quantity: addTouch ? cartProduct.quantity + 1 : quantity,
             totalPrice: quantity * price, //product.price,
             unidad: useSalePrice
           },

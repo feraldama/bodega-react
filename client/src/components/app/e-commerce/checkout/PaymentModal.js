@@ -205,7 +205,7 @@ const PaymentModal = ({
           Cancelar
         </Button>
         <Button variant="primary" onClick={sendRequest}>
-          Validar
+          Facturar
         </Button>
       </Modal.Footer>
     </Modal>

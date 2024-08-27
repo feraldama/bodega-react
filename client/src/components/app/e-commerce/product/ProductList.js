@@ -9,7 +9,7 @@ import useProductHook from './useProductHook';
 import ProductImage from './ProductImage';
 import Flex from 'components/common/Flex';
 
-const ProductList = ({ product, index, searchInputRef }) => {
+const ProductList = ({ product, index }) => {
   const {
     name,
     category,
@@ -33,15 +33,11 @@ const ProductList = ({ product, index, searchInputRef }) => {
   const { handleAddToCart, handleFavouriteClick } = useProductHook(product);
 
   const handleAddToCartAndFocus = () => {
-    handleAddToCart(0, true, true);
+    handleAddToCart(1, true, true, true);
     productsDispatch({
       type: 'UPDATE_SELECTED_PRODID',
       payload: { id }
     });
-    // if (searchInputRef.current) {
-    //   searchInputRef.current.focus();
-    //   searchInputRef.current.select();
-    // }
   };
 
   return (
