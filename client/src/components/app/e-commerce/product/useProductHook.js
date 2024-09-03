@@ -3,7 +3,7 @@ import { useContext } from 'react';
 
 const useProductHook = product => {
   const {
-    productsState: { cartItems },
+    productsState: { cartItems, productsCombos },
     productsDispatch,
     isInShoppingCart,
     isInFavouriteItems
@@ -17,13 +17,14 @@ const useProductHook = product => {
         payload: {
           product: {
             ...cartProduct,
-            quantity: addTouch ? cartProduct.quantity + 1 : quantity,
+            quantity: quantity,
             totalPrice: quantity * price, //product.price,
             unidad: useSalePrice
           },
           quantity
         }
       });
+      //ESTE ELSE NO SE USA, por eso hice handleAddToCartTouch
     } else {
       productsDispatch({
         type: 'ADD_TO_CART',
@@ -38,45 +39,38 @@ const useProductHook = product => {
     }
   };
 
-  // const handleAddToCart = (quantity, price, unidadCaja, addTouch) => {
-  //   console.log('log: 🚀  unidadCaja:', unidadCaja);
-  //   console.log('log: 🚀  price:', price);
-  //   console.log('log: 🚀  quantity:', quantity);
-  //   console.log('log: 🚀  product:', product);
-  //   if (isInShoppingCart(product.id)) {
-  //     console.log('log: 🚀  addTouch 1:', addTouch);
-  //     const cartProduct = cartItems.find(item => item.id === product.id);
-  //     console.log('log: 🚀  cartProduct:', cartProduct);
-  //     console.log('log: 🚀  cartItems:', cartItems);
-  //     productsDispatch({
-  //       type: 'UPDATE_CART_ITEM',
-  //       payload: {
-  //         product: {
-  //           ...cartProduct,
-  //           quantity: addTouch ? cartProduct.quantity + 1 : quantity,
-  //           totalPrice:
-  //             unidadCaja == 'U'
-  //               ? quantity * product.salePrice
-  //               : quantity * product.price,
-  //           unidad: unidadCaja
-  //         },
-  //         quantity
-  //       }
-  //     });
-  //   } else {
-  //     console.log('log: 🚀  addTouch 2:', addTouch);
-  //     productsDispatch({
-  //       type: 'ADD_TO_CART',
-  //       payload: {
-  //         product: {
-  //           ...product,
-  //           quantity,
-  //           totalPrice: quantity * product.price
-  //         }
-  //       }
-  //     });
-  //   }
-  // };
+  const handleAddToCartTouch = quantity => {
+    if (isInShoppingCart(product.id)) {
+      const cartProduct = cartItems.find(item => item.id === product.id);
+      productsDispatch({
+        type: 'UPDATE_CART_ITEM',
+        payload: {
+          product: {
+            ...cartProduct,
+            quantity: cartProduct.quantity + 1,
+            totalPrice:
+              cartProduct.unidad == 'U'
+                ? (cartProduct.quantity + 1) * product.salePrice
+                : (cartProduct.quantity + 1) * product.price, //product.price,
+            unidad: cartProduct.unidad
+          },
+          quantity
+        }
+      });
+    } else {
+      productsDispatch({
+        type: 'ADD_TO_CART',
+        payload: {
+          product: {
+            ...product,
+            quantity,
+            totalPrice: quantity * product.salePrice,
+            unidad: 'U'
+          }
+        }
+      });
+    }
+  };
 
   const handleFavouriteClick = () => {
     productsDispatch({
@@ -86,7 +80,7 @@ const useProductHook = product => {
       payload: { product }
     });
   };
-  return { handleAddToCart, handleFavouriteClick };
+  return { handleAddToCart, handleFavouriteClick, handleAddToCartTouch };
 };
 
 export default useProductHook;

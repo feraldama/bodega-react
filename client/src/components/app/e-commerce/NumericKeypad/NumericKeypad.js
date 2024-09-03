@@ -23,17 +23,18 @@ const NumericKeypad = ({
 
   const cerarCantidad = () => {
     if (selectedProductId !== null) {
-      const updatedCartItems = cartItems
-        .map(item => {
-          if (item.id === selectedProductId) {
-            return { ...item, quantity: 0 };
-          }
-          return item;
-        })
-        .filter(item => item.id === selectedProductId);
+      const cartProduct = cartItems.find(item => item.id === selectedProductId);
       productsDispatch({
-        type: 'UPDATE_CART_QUANTITY',
-        payload: { cartItems: updatedCartItems }
+        type: 'UPDATE_CART_ITEM',
+        payload: {
+          product: {
+            ...cartProduct,
+            quantity: 0,
+            totalPrice: 0, //product.price,
+            unidad: cartProduct.unidad
+          },
+          quantity: 0
+        }
       });
     }
   };

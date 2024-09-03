@@ -106,20 +106,33 @@ const Products = () => {
 
   const handleNumberClick = number => {
     if (selectedProductId !== null) {
-      const updatedCartItems = cartItems
-        .map(item => {
-          if (item.id === selectedProductId) {
-            const newQuantity = parseInt(
-              item.quantity == 0 ? number : `${item.quantity}${number}`
-            );
-            return { ...item, quantity: newQuantity };
-          }
-          return item;
-        })
-        .filter(item => item.id === selectedProductId);
+      const cartProduct = cartItems.find(item => item.id === selectedProductId);
       productsDispatch({
-        type: 'UPDATE_CART_QUANTITY',
-        payload: { cartItems: updatedCartItems }
+        type: 'UPDATE_CART_ITEM',
+        payload: {
+          product: {
+            ...cartProduct,
+            // quantity: cartProduct.quantity + 1,
+            quantity:
+              cartProduct.quantity == 0
+                ? number
+                : `${cartProduct.quantity}${number}`,
+            totalPrice:
+              cartProduct.unidad == 'U'
+                ? (cartProduct.quantity == 0
+                    ? number
+                    : `${cartProduct.quantity}${number}`) *
+                  cartProduct.salePrice
+                : (cartProduct.quantity == 0
+                    ? number
+                    : `${cartProduct.quantity}${number}`) * cartProduct.price, //product.price,
+            unidad: cartProduct.unidad
+          },
+          quantity:
+            cartProduct.quantity == 0
+              ? number
+              : `${cartProduct.quantity}${number}`
+        }
       });
     }
   };

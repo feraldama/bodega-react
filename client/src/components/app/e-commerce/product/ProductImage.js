@@ -15,32 +15,7 @@ const sliderSettings = {
 };
 
 const ProductSingleImage = ({ id, image, name, layout, productoImagen }) => {
-  // if (productoImagen.length > 1) {
-  //   console.log('log: 🚀  productoImagen 2:', productoImagen);
-  // }
   return (
-    // <Link
-    //   to={`/e-commerce/product/product-details/${id}`}
-    //   className="d-block h-sm-100"
-    //   key={image.id}
-    // >
-    // <Image
-    //   rounded={layout === 'list'}
-    //   src={image.src}
-    //   className={classNames('h-100 w-100 fit-cover', {
-    //     'rounded-top': layout === 'grid'
-    //   })}
-    //   alt={name}
-    // />
-
-    // <img
-    //   src={`data:image/jpeg;base64,${Buffer.from(productoImagen).toString(
-    //     'base64'
-    //   )}`}
-    //   // src={`data:image/jpeg;base64,${productoImagen}`}
-    //   alt={name}
-    // />
-
     <div
       style={{
         display: 'flex',
@@ -66,7 +41,6 @@ const ProductSingleImage = ({ id, image, name, layout, productoImagen }) => {
         alt={name}
       />
     </div>
-    // </Link>
   );
 };
 

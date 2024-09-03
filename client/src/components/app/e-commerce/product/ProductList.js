@@ -30,10 +30,12 @@ const ProductList = ({ product, index }) => {
   const formattedPrice = new Intl.NumberFormat('es-ES').format(price);
   const formattedSalePrice = new Intl.NumberFormat('es-ES').format(salePrice);
 
-  const { handleAddToCart, handleFavouriteClick } = useProductHook(product);
+  const { handleAddToCart, handleFavouriteClick, handleAddToCartTouch } =
+    useProductHook(product);
 
   const handleAddToCartAndFocus = () => {
-    handleAddToCart(0, true, true);
+    // handleAddToCart(0, true, true);
+    handleAddToCartTouch(1);
     productsDispatch({
       type: 'UPDATE_SELECTED_PRODID',
       payload: { id }
