@@ -15,15 +15,33 @@ const CartItem = ({ product }) => {
     totalPrice,
     price,
     salePrice,
-    ProductoImagen
+    ProductoImagen,
+    combo
   } = product;
   const [useSalePrice, setUseSalePrice] = useState(false);
 
   const formattedPrice = new Intl.NumberFormat('es-ES').format(
     useSalePrice ? price : salePrice
   );
+
+  // Calcular formattedTotalPrice utilizando la lógica del combo
+  const calculateTotalPrice = () => {
+    if (combo && quantity >= combo.ComboCantidad) {
+      const numCombos = Math.floor(quantity / combo.ComboCantidad); // Número de combos completos
+      const remainingItems = quantity % combo.ComboCantidad; // Cantidad restante
+      const comboTotalPrice = numCombos * combo.ComboPrecio; // Precio total de los combos completos
+      const remainingTotalPrice =
+        remainingItems * (useSalePrice ? price : salePrice); // Precio total de los elementos restantes
+      return useSalePrice
+        ? quantity * price
+        : comboTotalPrice + remainingTotalPrice; // Precio total
+    } else {
+      return quantity * (useSalePrice ? price : salePrice);
+    }
+  };
+
   const formattedTotalPrice = new Intl.NumberFormat('es-ES').format(
-    useSalePrice ? price * quantity : salePrice * quantity
+    calculateTotalPrice()
   );
 
   const { handleAddToCart } = useProductHook(product);

@@ -107,33 +107,70 @@ const Products = () => {
   const handleNumberClick = number => {
     if (selectedProductId !== null) {
       const cartProduct = cartItems.find(item => item.id === selectedProductId);
-      productsDispatch({
-        type: 'UPDATE_CART_ITEM',
-        payload: {
-          product: {
-            ...cartProduct,
-            // quantity: cartProduct.quantity + 1,
+      const comboProduct = productsCombos.find(
+        item => item.ProductoId === cartProduct.id
+      );
+      const precioCombo = () => {
+        // Verificar si ComboPrecio está definido
+        return !!comboProduct?.ComboPrecio;
+      };
+      const comboExist = precioCombo();
+      // Calcular la nueva cantidad total en el carrito después de agregar uno más
+      const newQuantity =
+        cartProduct.quantity == 0 ? number : `${cartProduct.quantity}${number}`;
+      if (
+        comboProduct?.ComboCantidad <= newQuantity &&
+        cartProduct.unidad == 'U'
+      ) {
+        // Calcular cuántos combos completos se pueden formar
+        const numCombos = Math.floor(newQuantity / comboProduct.ComboCantidad);
+        const remainingItems = newQuantity % comboProduct.ComboCantidad;
+
+        // Calcular el precio total
+        const totalPrice =
+          numCombos * comboProduct.ComboPrecio +
+          remainingItems *
+            (cartProduct.unidad === 'U'
+              ? cartProduct.salePrice
+              : cartProduct.price);
+
+        productsDispatch({
+          type: 'UPDATE_CART_ITEM',
+          payload: {
+            product: {
+              ...cartProduct,
+              quantity: newQuantity,
+              totalPrice:
+                cartProduct.unidad === 'U'
+                  ? totalPrice
+                  : (cartProduct.quantity + 1) * cartProduct.price,
+              unidad: cartProduct.unidad,
+              combo: comboExist && comboProduct
+            },
+            quantity: newQuantity
+          }
+        });
+      } else {
+        productsDispatch({
+          type: 'UPDATE_CART_ITEM',
+          payload: {
+            product: {
+              ...cartProduct,
+              // quantity: cartProduct.quantity + 1,
+              quantity: newQuantity,
+              totalPrice:
+                cartProduct.unidad == 'U'
+                  ? newQuantity * cartProduct.salePrice
+                  : newQuantity * cartProduct.price, //product.price,
+              unidad: cartProduct.unidad
+            },
             quantity:
               cartProduct.quantity == 0
                 ? number
-                : `${cartProduct.quantity}${number}`,
-            totalPrice:
-              cartProduct.unidad == 'U'
-                ? (cartProduct.quantity == 0
-                    ? number
-                    : `${cartProduct.quantity}${number}`) *
-                  cartProduct.salePrice
-                : (cartProduct.quantity == 0
-                    ? number
-                    : `${cartProduct.quantity}${number}`) * cartProduct.price, //product.price,
-            unidad: cartProduct.unidad
-          },
-          quantity:
-            cartProduct.quantity == 0
-              ? number
-              : `${cartProduct.quantity}${number}`
-        }
-      });
+                : `${cartProduct.quantity}${number}`
+          }
+        });
+      }
     }
   };
 
