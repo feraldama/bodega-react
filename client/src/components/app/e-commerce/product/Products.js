@@ -106,7 +106,8 @@ const Products = () => {
 
   const handleNumberClick = number => {
     if (selectedProductId !== null) {
-      const cartProduct = cartItems.find(item => item.id === selectedProductId);
+      // const cartProduct = cartItems.find(item => item.id === selectedProductId);
+      const cartProduct = cartItems[selectedProductId];
       const comboProduct = productsCombos.find(
         item => item.ProductoId === cartProduct.id
       );
@@ -147,7 +148,8 @@ const Products = () => {
               unidad: cartProduct.unidad,
               combo: comboExist && comboProduct
             },
-            quantity: newQuantity
+            quantity: newQuantity,
+            index: selectedProductId
           }
         });
       } else {
@@ -167,7 +169,8 @@ const Products = () => {
             quantity:
               cartProduct.quantity == 0
                 ? number
-                : `${cartProduct.quantity}${number}`
+                : `${cartProduct.quantity}${number}`,
+            index: selectedProductId
           }
         });
       }

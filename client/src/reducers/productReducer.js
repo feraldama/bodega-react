@@ -51,8 +51,8 @@ export const productReducer = (state, action) => {
     case 'UPDATE_CART_ITEM':
       return {
         ...state,
-        cartItems: state.cartItems.map(item =>
-          item.id === payload.product.id ? payload.product : item
+        cartItems: state.cartItems.map(
+          (item, index) => (index === payload.index ? payload.product : item) // Verificar si el índice coincide
         ),
         cartModal: {
           show: payload.showModal,
@@ -70,13 +70,13 @@ export const productReducer = (state, action) => {
     case 'UPDATE_SELECTED_PRODID':
       return {
         ...state,
-        selectedProductId: payload.id
+        selectedProductId: payload.index
       };
     case 'REMOVE_FROM_CART':
       return {
         ...state,
         cartItems: state.cartItems.filter(
-          product => product.id !== payload.product.id
+          (product, index) => index !== payload.index
         ),
         cartModal: {
           show: true,

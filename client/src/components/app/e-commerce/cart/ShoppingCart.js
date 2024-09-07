@@ -64,8 +64,8 @@ const ShoppingCart = ({ handleShow }) => {
                   </Row>
                 </Col>
               </Row>
-              {cartItems.map(product => (
-                <CartItem key={product.id} product={product} />
+              {cartItems.map((product, index) => (
+                <CartItem key={index} product={product} index={index} />
               ))}
               <Row className="d-xs-block d-md-none fw-bold gx-card mx-0">
                 <Col xs={7} md={4} className="py-2 text-end text-900">

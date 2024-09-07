@@ -6,7 +6,7 @@ import { ProductContext } from 'context/Context';
 import QuantityController from '../QuantityController';
 import { Buffer } from 'buffer';
 
-const CartItem = ({ product }) => {
+const CartItem = ({ product, index }) => {
   const {
     id,
     files,
@@ -56,7 +56,7 @@ const CartItem = ({ product }) => {
   const handleRemove = () => {
     productsDispatch({
       type: 'REMOVE_FROM_CART',
-      payload: { product }
+      payload: { product, index }
     });
   };
 
@@ -64,7 +64,8 @@ const CartItem = ({ product }) => {
     handleAddToCart(
       parseInt(quantity + 1),
       useSalePrice ? price : salePrice,
-      useSalePrice ? 'C' : 'U'
+      useSalePrice ? 'C' : 'U',
+      index
     );
   };
 
@@ -73,7 +74,8 @@ const CartItem = ({ product }) => {
       handleAddToCart(
         parseInt(quantity - 1),
         useSalePrice ? price : salePrice,
-        useSalePrice ? 'C' : 'U'
+        useSalePrice ? 'C' : 'U',
+        index
       );
     }
   };
@@ -82,7 +84,8 @@ const CartItem = ({ product }) => {
     handleAddToCart(
       parseInt(e.target.value < 1 ? 0 : e.target.value),
       useSalePrice ? price : salePrice,
-      useSalePrice ? 'C' : 'U'
+      useSalePrice ? 'C' : 'U',
+      index
     );
   };
 
@@ -101,7 +104,7 @@ const CartItem = ({ product }) => {
     }
     productsDispatch({
       type: 'UPDATE_SELECTED_PRODID',
-      payload: { id }
+      payload: { index }
     });
   };
 
@@ -215,7 +218,8 @@ CartItem.propTypes = {
     name: PropTypes.string.isRequired,
     quantity: PropTypes.number.isRequired,
     totalPrice: PropTypes.number.isRequired
-  })
+  }),
+  index: PropTypes.number.isRequired
 };
 
 export default CartItem;

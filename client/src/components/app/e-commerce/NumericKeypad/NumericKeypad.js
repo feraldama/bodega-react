@@ -23,7 +23,8 @@ const NumericKeypad = ({
 
   const cerarCantidad = () => {
     if (selectedProductId !== null) {
-      const cartProduct = cartItems.find(item => item.id === selectedProductId);
+      // const cartProduct = cartItems.find(item => item.id === selectedProductId);
+      const cartProduct = cartItems[selectedProductId];
       productsDispatch({
         type: 'UPDATE_CART_ITEM',
         payload: {
@@ -33,7 +34,8 @@ const NumericKeypad = ({
             totalPrice: 0, //product.price,
             unidad: cartProduct.unidad
           },
-          quantity: 0
+          quantity: 0,
+          index: selectedProductId
         }
       });
     }
