@@ -93,7 +93,8 @@ const CartItem = ({ product, index }) => {
     handleAddToCart(
       parseInt(quantity),
       useSalePrice ? price : salePrice,
-      useSalePrice ? 'C' : 'U'
+      useSalePrice ? 'C' : 'U',
+      index
     );
   };
 
