@@ -8,7 +8,7 @@ import { ProductContext } from 'context/Context';
 import useProductHook from './useProductHook';
 import ProductImage from './ProductImage';
 
-const ProductGrid = ({ product, ...rest }) => {
+const ProductGrid = ({ product, index, ...rest }) => {
   const {
     name,
     category,
@@ -34,7 +34,7 @@ const ProductGrid = ({ product, ...rest }) => {
     handleAddToCartTouch(1);
     productsDispatch({
       type: 'UPDATE_SELECTED_PRODID',
-      payload: { id }
+      payload: { index }
     });
     // if (rest.searchInputRef.current) {
     //   rest.searchInputRef.current.focus();

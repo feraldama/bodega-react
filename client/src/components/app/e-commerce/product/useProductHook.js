@@ -1,4 +1,4 @@
-import { ProductContext } from 'context/Context';
+import { ProductContext, CustomerContext } from 'context/Context';
 import { useContext } from 'react';
 
 const useProductHook = product => {
@@ -8,6 +8,11 @@ const useProductHook = product => {
     isInShoppingCart,
     isInFavouriteItems
   } = useContext(ProductContext);
+
+  const {
+    customersState: { selectedCustomer }
+  } = useContext(CustomerContext);
+  // console.log('log: 🚀  selectedCustomer:', selectedCustomer);
 
   const handleAddToCart = (quantity, price, useSalePrice, index) => {
     const comboProduct = productsCombos.find(
@@ -39,8 +44,14 @@ const useProductHook = product => {
           product: {
             ...cartProduct,
             quantity: quantity,
+            // totalPrice:
+            //   useSalePrice === 'U' ? totalPrice : quantity * product.price,
             totalPrice:
-              useSalePrice === 'U' ? totalPrice : quantity * product.price,
+              useSalePrice == 'U'
+                ? totalPrice
+                : selectedCustomer.ClienteTipo == 'MI'
+                ? quantity * product.price
+                : quantity * product.ProductoPrecioVentaMayorista,
             unidad: useSalePrice,
             combo: comboExist && comboProduct
           },
@@ -55,7 +66,16 @@ const useProductHook = product => {
           product: {
             ...cartProduct,
             quantity: quantity,
-            totalPrice: quantity * price, //product.price,
+            // totalPrice:
+            //   selectedCustomer.ClienteTipo == 'MI'
+            //     ? quantity * price
+            //     : quantity * product.ProductoPrecioVentaMayorista, //product.price,
+            totalPrice:
+              useSalePrice == 'U'
+                ? quantity * cartProduct.salePrice
+                : selectedCustomer.ClienteTipo == 'MI'
+                ? quantity * price
+                : quantity * cartProduct.ProductoPrecioVentaMayorista,
             unidad: useSalePrice
           },
           quantity,

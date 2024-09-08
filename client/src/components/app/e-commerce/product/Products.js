@@ -163,13 +163,13 @@ const Products = () => {
               totalPrice:
                 cartProduct.unidad == 'U'
                   ? newQuantity * cartProduct.salePrice
-                  : newQuantity * cartProduct.price, //product.price,
+                  : selectedCustomer.ClienteTipo == 'MI'
+                  ? newQuantity * cartProduct.price
+                  : newQuantity * cartProduct.ProductoPrecioVentaMayorista,
+              // newQuantity * cartProduct.price, //product.price,
               unidad: cartProduct.unidad
             },
-            quantity:
-              cartProduct.quantity == 0
-                ? number
-                : `${cartProduct.quantity}${number}`,
+            quantity: newQuantity,
             index: selectedProductId
           }
         });

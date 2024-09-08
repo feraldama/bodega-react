@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, Row, Form } from 'react-bootstrap';
 import useProductHook from '../product/useProductHook';
-import { ProductContext } from 'context/Context';
+import { ProductContext, CustomerContext } from 'context/Context';
 import QuantityController from '../QuantityController';
 import { Buffer } from 'buffer';
 
@@ -18,6 +18,16 @@ const CartItem = ({ product, index }) => {
     ProductoImagen,
     combo
   } = product;
+
+  const {
+    productsState: { selectedProductId },
+    productsDispatch
+  } = useContext(ProductContext);
+
+  const {
+    customersState: { selectedCustomer }
+  } = useContext(CustomerContext);
+
   const [useSalePrice, setUseSalePrice] = useState(false);
 
   const formattedPrice = new Intl.NumberFormat('es-ES').format(
@@ -36,7 +46,15 @@ const CartItem = ({ product, index }) => {
         ? quantity * price
         : comboTotalPrice + remainingTotalPrice; // Precio total
     } else {
-      return quantity * (useSalePrice ? price : salePrice);
+      return (
+        quantity *
+        (useSalePrice
+          ? selectedCustomer?.ClienteTipo == 'MI'
+            ? price
+            : product.ProductoPrecioVentaMayorista
+          : salePrice)
+      );
+      // return quantity * (useSalePrice ? price : salePrice);
     }
   };
 
@@ -45,11 +63,6 @@ const CartItem = ({ product, index }) => {
   );
 
   const { handleAddToCart } = useProductHook(product);
-
-  const {
-    productsState: { selectedProductId },
-    productsDispatch
-  } = useContext(ProductContext);
 
   const quantityInputRef = useRef(null);
 

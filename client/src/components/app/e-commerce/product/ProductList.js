@@ -38,7 +38,7 @@ const ProductList = ({ product, index }) => {
     handleAddToCartTouch(1);
     productsDispatch({
       type: 'UPDATE_SELECTED_PRODID',
-      payload: { id }
+      payload: { index }
     });
   };
 
