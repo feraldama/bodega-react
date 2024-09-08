@@ -4,7 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ProductContext } from 'context/Context';
+import { ProductContext, CustomerContext } from 'context/Context';
 import useProductHook from './useProductHook';
 import ProductImage from './ProductImage';
 import Flex from 'components/common/Flex';
@@ -27,7 +27,16 @@ const ProductList = ({ product, index }) => {
 
   const { productsDispatch } = useContext(ProductContext);
 
-  const formattedPrice = new Intl.NumberFormat('es-ES').format(price);
+  const {
+    customersState: { selectedCustomer }
+  } = useContext(CustomerContext);
+
+  const formattedPrice = new Intl.NumberFormat('es-ES').format(
+    selectedCustomer?.ClienteTipo == 'MI'
+      ? price
+      : product.ProductoPrecioVentaMayorista
+  );
+
   const formattedSalePrice = new Intl.NumberFormat('es-ES').format(salePrice);
 
   const { handleAddToCart, handleFavouriteClick, handleAddToCartTouch } =

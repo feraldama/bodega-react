@@ -4,7 +4,7 @@ import Flex from 'components/common/Flex';
 import { Link } from 'react-router-dom';
 import { Col } from 'react-bootstrap';
 import classNames from 'classnames';
-import { ProductContext } from 'context/Context';
+import { ProductContext, CustomerContext } from 'context/Context';
 import useProductHook from './useProductHook';
 import ProductImage from './ProductImage';
 
@@ -22,7 +22,15 @@ const ProductGrid = ({ product, index, ...rest }) => {
     ProductoStockUnitario
   } = product;
 
-  const formattedPrice = new Intl.NumberFormat('es-ES').format(price);
+  const {
+    customersState: { selectedCustomer }
+  } = useContext(CustomerContext);
+
+  const formattedPrice = new Intl.NumberFormat('es-ES').format(
+    selectedCustomer?.ClienteTipo == 'MI'
+      ? price
+      : product.ProductoPrecioVentaMayorista
+  );
   const formattedSalePrice = new Intl.NumberFormat('es-ES').format(salePrice);
   const { productsDispatch } = useContext(ProductContext);
 

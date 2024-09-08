@@ -31,7 +31,11 @@ const CartItem = ({ product, index }) => {
   const [useSalePrice, setUseSalePrice] = useState(false);
 
   const formattedPrice = new Intl.NumberFormat('es-ES').format(
-    useSalePrice ? price : salePrice
+    useSalePrice
+      ? selectedCustomer?.ClienteTipo == 'MI'
+        ? price
+        : product.ProductoPrecioVentaMayorista
+      : salePrice
   );
 
   // Calcular formattedTotalPrice utilizando la lógica del combo
