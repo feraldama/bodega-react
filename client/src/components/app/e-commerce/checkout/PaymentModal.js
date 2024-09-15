@@ -111,36 +111,75 @@ const PaymentModal = ({
               Cuenta de cliente
             </Button>
             <Row className="gx-card mx-0">
-              <Col xs={8} md={8} className="py-2 text-end text-900">
+              <Col xs={6} md={6} className="py-2 text-end text-900">
                 Efectivo:
               </Col>
-              <Col xs={4} md={3} className="text-end py-2 text-nowrap px-x1">
-                {new Intl.NumberFormat('es-ES').format(efectivo)}
+              <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
+                <Form.Control
+                  type="text"
+                  value={efectivo}
+                  onChange={e => {
+                    const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+                    setEfectivo(newValue);
+                    const totalResto =
+                      totalCost - newValue - banco - cuentaCliente;
+                    setTotalRest(totalResto);
+                  }}
+                  aria-label="Efectivo"
+                  className="text-end"
+                />
               </Col>
             </Row>
-
             <Row className="gx-card mx-0">
-              <Col xs={8} md={8} className="py-2 text-end text-900">
+              <Col xs={6} md={6} className="py-2 text-end text-900">
                 Banco:
               </Col>
-              <Col xs={4} md={3} className="text-end py-2 text-nowrap px-x1">
-                {new Intl.NumberFormat('es-ES').format(banco)}
+              <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
+                <Form.Control
+                  type="text"
+                  value={banco}
+                  onChange={e => {
+                    const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+                    setBanco(newValue);
+                    const totalResto =
+                      totalCost - efectivo - newValue - cuentaCliente;
+                    setTotalRest(totalResto);
+                  }}
+                  aria-label="Banco"
+                  className="text-end"
+                />
               </Col>
             </Row>
 
             <Row className="gx-card mx-0">
-              <Col xs={8} md={8} className="py-2 text-end text-900">
+              <Col xs={6} md={6} className="py-2 text-end text-900">
                 Cuenta de cliente:
               </Col>
-              <Col xs={4} md={3} className="text-end py-2 text-nowrap px-x1">
-                {new Intl.NumberFormat('es-ES').format(cuentaCliente)}
+              <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
+                <Form.Control
+                  type="text"
+                  value={cuentaCliente}
+                  onChange={e => {
+                    const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+                    setCuentaCliente(newValue);
+                    const totalResto = totalCost - efectivo - banco - newValue;
+                    setTotalRest(totalResto);
+                  }}
+                  aria-label="Cuenta de cliente"
+                  className="text-end"
+                />
               </Col>
             </Row>
             <Row className="gx-card mx-0">
-              <Col xs={8} md={8} className="py-2 text-end text-900">
+              <Col xs={6} md={6} className="py-2 text-end text-900">
                 Restante:
               </Col>
-              <Col xs={4} md={3} className="text-end py-2 text-nowrap px-x1">
+              <Col
+                xs={6}
+                md={6}
+                className="text-end py-2 text-nowrap px-x1"
+                style={{ color: totalRest != 0 ? 'red' : 'black' }}
+              >
                 {new Intl.NumberFormat('es-ES').format(totalRest)}
               </Col>
             </Row>
@@ -200,11 +239,23 @@ const PaymentModal = ({
           </Col>
         </Row>
       </Modal.Body>
-      <Modal.Footer>
+      {/* <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
           Cancelar
         </Button>
         <Button variant="primary" onClick={sendRequest}>
+          Facturar
+        </Button>
+      </Modal.Footer> */}
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Cancelar
+        </Button>
+        <Button
+          variant="primary"
+          onClick={sendRequest}
+          disabled={totalRest != 0} // Deshabilitar el botón si el totalRest es mayor a cero
+        >
           Facturar
         </Button>
       </Modal.Footer>
