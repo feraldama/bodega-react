@@ -144,7 +144,7 @@ const CartItem = ({ product, index }) => {
   return (
     <Row
       className={`gx-card mx-0 align-items-center border-bottom border-200 ${
-        id == selectedProductId ? 'bg-light' : ''
+        index == selectedProductId ? 'bg-light' : ''
       }`}
       onClick={productoSeleccionado}
     >
