@@ -25,7 +25,10 @@ const ProductList = ({ product, index }) => {
     ProductoStockUnitario
   } = product;
 
-  const { productsDispatch } = useContext(ProductContext);
+  const {
+    productsState: { cartItems },
+    productsDispatch
+  } = useContext(ProductContext);
 
   const {
     customersState: { selectedCustomer }
@@ -47,7 +50,7 @@ const ProductList = ({ product, index }) => {
     handleAddToCartTouch(1);
     productsDispatch({
       type: 'UPDATE_SELECTED_PRODID',
-      payload: { index }
+      payload: { index: cartItems.length }
     });
   };
 

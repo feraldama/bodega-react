@@ -32,7 +32,10 @@ const ProductGrid = ({ product, index, ...rest }) => {
       : product.ProductoPrecioVentaMayorista
   );
   const formattedSalePrice = new Intl.NumberFormat('es-ES').format(salePrice);
-  const { productsDispatch } = useContext(ProductContext);
+  const {
+    productsState: { cartItems },
+    productsDispatch
+  } = useContext(ProductContext);
 
   const { handleAddToCart, handleFavouriteClick, handleAddToCartTouch } =
     useProductHook(product);
@@ -42,12 +45,8 @@ const ProductGrid = ({ product, index, ...rest }) => {
     handleAddToCartTouch(1);
     productsDispatch({
       type: 'UPDATE_SELECTED_PRODID',
-      payload: { index }
+      payload: { index: cartItems.length }
     });
-    // if (rest.searchInputRef.current) {
-    //   rest.searchInputRef.current.focus();
-    //   rest.searchInputRef.current.select();
-    // }
   };
 
   return (

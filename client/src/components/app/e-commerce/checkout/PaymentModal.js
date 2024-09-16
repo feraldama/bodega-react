@@ -77,39 +77,6 @@ const PaymentModal = ({
       <Modal.Body>
         <Row>
           <Col>
-            <Button
-              variant="light"
-              className="w-100 mb-2"
-              onClick={() => setPagoTipoLocal('E')}
-            >
-              Efectivo
-            </Button>
-            <Button
-              variant="light"
-              className="w-100 mb-2"
-              onClick={() => {
-                setPagoTipoLocal('B');
-                if (banco == 0) {
-                  setBanco(totalRest);
-                  setTotalRest(0);
-                }
-              }}
-            >
-              Banco
-            </Button>
-            <Button
-              variant="light"
-              className="w-100 mb-2"
-              onClick={() => {
-                setPagoTipoLocal('C');
-                if (cuentaCliente == 0) {
-                  setCuentaCliente(totalRest);
-                  setTotalRest(0);
-                }
-              }}
-            >
-              Cuenta de cliente
-            </Button>
             <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
                 Efectivo:
@@ -117,7 +84,16 @@ const PaymentModal = ({
               <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
                 <Form.Control
                   type="text"
-                  value={efectivo}
+                  // value={efectivo}
+                  value={new Intl.NumberFormat('es-ES').format(efectivo)}
+                  onFocus={e => {
+                    setPagoTipoLocal('E');
+                    if (efectivo == 0) {
+                      setEfectivo(totalRest);
+                      setTotalRest(0);
+                    }
+                    e.target.select();
+                  }}
                   onChange={e => {
                     const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
                     setEfectivo(newValue);
@@ -137,7 +113,16 @@ const PaymentModal = ({
               <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
                 <Form.Control
                   type="text"
-                  value={banco}
+                  // value={banco}
+                  value={new Intl.NumberFormat('es-ES').format(banco)}
+                  onFocus={e => {
+                    setPagoTipoLocal('B');
+                    if (banco == 0) {
+                      setBanco(totalRest);
+                      setTotalRest(0);
+                    }
+                    e.target.select();
+                  }}
                   onChange={e => {
                     const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
                     setBanco(newValue);
@@ -158,7 +143,16 @@ const PaymentModal = ({
               <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
                 <Form.Control
                   type="text"
-                  value={cuentaCliente}
+                  // value={cuentaCliente}
+                  value={new Intl.NumberFormat('es-ES').format(cuentaCliente)}
+                  onFocus={e => {
+                    setPagoTipoLocal('C');
+                    if (cuentaCliente == 0) {
+                      setCuentaCliente(totalRest);
+                      setTotalRest(0);
+                    }
+                    e.target.select();
+                  }}
                   onChange={e => {
                     const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
                     setCuentaCliente(newValue);
@@ -239,14 +233,6 @@ const PaymentModal = ({
           </Col>
         </Row>
       </Modal.Body>
-      {/* <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Cancelar
-        </Button>
-        <Button variant="primary" onClick={sendRequest}>
-          Facturar
-        </Button>
-      </Modal.Footer> */}
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
           Cancelar
