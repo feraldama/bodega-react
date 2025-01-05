@@ -33,8 +33,7 @@ const Products = () => {
   } = useContext(ProductContext);
 
   const {
-    customersState: { customers, selectedCustomer },
-    customersDispatch
+    customersState: { selectedCustomer }
   } = useContext(CustomerContext);
 
   const [sortBy, setSortBy] = useState('id');
@@ -43,8 +42,6 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [totalCost, setTotalCost] = useState(0);
   const [totalRest, setTotalRest] = useState(0);
-  const [ventaTipo, setVentaTipo] = useState('CO');
-  const [pagoTipo, setPagoTipo] = useState('E');
   const [showModal, setShowModal] = useState(false);
   const [showCustomerModal, setShowCustomerModal] = useState(false);
   const [cliente, setCliente] = useState(
@@ -52,6 +49,8 @@ const Products = () => {
   );
   const [efectivo, setEfectivo] = useState(0);
   const [banco, setBanco] = useState(0);
+  const [bancoDebito, setBancoDebito] = useState(0);
+  const [bancoCredito, setBancoCredito] = useState(0);
   const [cuentaCliente, setCuentaCliente] = useState(0);
 
   const { productLayout } = useParams();
@@ -225,7 +224,7 @@ const Products = () => {
             Usuarioid: 'vendedor',
             Efectivo: 50000,
             Total2: getSubtotal(cartItems),
-            Ventatipo: ventaTipo,
+            Ventatipo: 'CO',
             Pagotipo: 'E',
             Clienteid: selectedCustomer.ClienteId,
             Efectivoreact: efectivo,
@@ -456,11 +455,14 @@ const Products = () => {
         totalCost={totalCost}
         totalRest={totalRest}
         setTotalRest={setTotalRest}
-        setPagoTipo={setPagoTipo}
         efectivo={efectivo}
         setEfectivo={setEfectivo}
         banco={banco}
         setBanco={setBanco}
+        bancoDebito={bancoDebito}
+        setBancoDebito={setBancoDebito}
+        bancoCredito={bancoCredito}
+        setBancoCredito={setBancoCredito}
         cuentaCliente={cuentaCliente}
         setCuentaCliente={setCuentaCliente}
         sendRequest={sendRequest}

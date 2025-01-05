@@ -1,11 +1,11 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ProductContext } from 'context/Context';
 import { productData } from 'data/ecommerce/productData';
 import { productReducer } from 'reducers/productReducer';
 import axios from 'axios';
 import product3 from 'assets/img/products/4.jpg';
-import product2 from 'assets/img/products/2.jpg';
+// import product2 from 'assets/img/products/2.jpg';
 
 const ProductProvider = ({ children }) => {
   const initData = {

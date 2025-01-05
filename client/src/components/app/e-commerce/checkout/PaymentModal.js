@@ -15,11 +15,14 @@ const PaymentModal = ({
   totalCost,
   totalRest,
   setTotalRest,
-  setPagoTipo,
   efectivo,
   setEfectivo,
   banco,
   setBanco,
+  bancoDebito,
+  setBancoDebito,
+  bancoCredito,
+  setBancoCredito,
   cuentaCliente,
   setCuentaCliente,
   sendRequest
@@ -29,19 +32,24 @@ const PaymentModal = ({
   const onNumberClickModal = label => {
     let efe = 0;
     let ban = 0;
+    let deb = 0;
     let cuentaCli = 0;
     let totalResto = 0;
     if (pagoTipo === 'E') {
       efe = efectivo == 0 ? `${label}` : `${efectivo}${label}`;
-      totalResto = totalCost - efe - banco - cuentaCliente;
+      totalResto = totalCost - efe - banco - bancoDebito - cuentaCliente;
       setEfectivo(efe);
     } else if (pagoTipo === 'B') {
       ban = banco == 0 ? `${label}` : `${banco}${label}`;
-      totalResto = totalCost - efectivo - ban - cuentaCliente;
+      totalResto = totalCost - efectivo - ban - bancoDebito - cuentaCliente;
       setBanco(ban);
+    } else if (pagoTipo === 'D') {
+      deb = bancoDebito == 0 ? `${label}` : `${bancoDebito}${label}`;
+      totalResto = totalCost - efectivo - banco - cuentaCliente - deb * 1.03; // Suma el 3%
+      setBancoDebito(deb);
     } else {
       cuentaCli = cuentaCliente == 0 ? `${label}` : `${cuentaCliente}${label}`;
-      totalResto = totalCost - efectivo - banco - cuentaCli;
+      totalResto = totalCost - efectivo - banco - bancoDebito - cuentaCli;
       setCuentaCliente(cuentaCli);
     }
     setTotalRest(totalResto);
@@ -50,13 +58,16 @@ const PaymentModal = ({
   const cerarCantidadModal = () => {
     let totalResto = 0;
     if (pagoTipo === 'E') {
-      totalResto = totalCost - banco - cuentaCliente;
+      totalResto = totalCost - banco - bancoDebito - cuentaCliente;
       setEfectivo(0);
     } else if (pagoTipo === 'B') {
-      totalResto = totalCost - efectivo - cuentaCliente;
+      totalResto = totalCost - efectivo - bancoDebito - cuentaCliente;
       setBanco(0);
+    } else if (pagoTipo === 'D') {
+      totalResto = totalCost - efectivo - banco - cuentaCliente;
+      setBancoDebito(0);
     } else {
-      totalResto = totalCost - efectivo - banco;
+      totalResto = totalCost - efectivo - banco - bancoDebito;
       setCuentaCliente(0);
     }
     setTotalRest(totalResto);
@@ -77,6 +88,7 @@ const PaymentModal = ({
       <Modal.Body>
         <Row>
           <Col>
+            {/* Efectivo */}
             <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
                 Efectivo:
@@ -84,7 +96,6 @@ const PaymentModal = ({
               <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
                 <Form.Control
                   type="text"
-                  // value={efectivo}
                   value={new Intl.NumberFormat('es-ES').format(efectivo)}
                   onFocus={e => {
                     setPagoTipoLocal('E');
@@ -95,10 +106,14 @@ const PaymentModal = ({
                     e.target.select();
                   }}
                   onChange={e => {
-                    const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+                    const newValue = e.target.value.replace(/\D/g, '');
                     setEfectivo(newValue);
                     const totalResto =
-                      totalCost - newValue - banco - cuentaCliente;
+                      totalCost -
+                      newValue -
+                      banco -
+                      bancoDebito -
+                      cuentaCliente;
                     setTotalRest(totalResto);
                   }}
                   aria-label="Efectivo"
@@ -106,6 +121,8 @@ const PaymentModal = ({
                 />
               </Col>
             </Row>
+
+            {/* Banco */}
             <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
                 Banco:
@@ -113,7 +130,6 @@ const PaymentModal = ({
               <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
                 <Form.Control
                   type="text"
-                  // value={banco}
                   value={new Intl.NumberFormat('es-ES').format(banco)}
                   onFocus={e => {
                     setPagoTipoLocal('B');
@@ -124,10 +140,14 @@ const PaymentModal = ({
                     e.target.select();
                   }}
                   onChange={e => {
-                    const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+                    const newValue = e.target.value.replace(/\D/g, '');
                     setBanco(newValue);
                     const totalResto =
-                      totalCost - efectivo - newValue - cuentaCliente;
+                      totalCost -
+                      efectivo -
+                      newValue -
+                      bancoDebito -
+                      cuentaCliente;
                     setTotalRest(totalResto);
                   }}
                   aria-label="Banco"
@@ -136,6 +156,7 @@ const PaymentModal = ({
               </Col>
             </Row>
 
+            {/* Cuenta Cliente */}
             <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
                 Cuenta de cliente:
@@ -156,7 +177,8 @@ const PaymentModal = ({
                   onChange={e => {
                     const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
                     setCuentaCliente(newValue);
-                    const totalResto = totalCost - efectivo - banco - newValue;
+                    const totalResto =
+                      totalCost - efectivo - banco - newValue - bancoDebito;
                     setTotalRest(totalResto);
                   }}
                   aria-label="Cuenta de cliente"
@@ -164,6 +186,42 @@ const PaymentModal = ({
                 />
               </Col>
             </Row>
+
+            {/* Banco Débito */}
+            <Row className="gx-card mx-0">
+              <Col xs={6} md={6} className="py-2 text-end text-900">
+                Banco Débito (3% adicional):
+              </Col>
+              <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
+                <Form.Control
+                  type="text"
+                  value={new Intl.NumberFormat('es-ES').format(bancoDebito)}
+                  onFocus={e => {
+                    setPagoTipoLocal('D');
+                    if (bancoDebito == 0) {
+                      setBancoDebito(totalRest * 1.03);
+                      setTotalRest(0);
+                    }
+                    e.target.select();
+                  }}
+                  onChange={e => {
+                    const newValue = e.target.value.replace(/\D/g, '');
+                    setBancoDebito(newValue);
+                    const totalResto =
+                      totalCost -
+                      efectivo -
+                      banco -
+                      cuentaCliente -
+                      newValue * 1.03; // Calcula el 3% adicional
+                    setTotalRest(totalResto);
+                  }}
+                  aria-label="Banco Débito"
+                  className="text-end"
+                />
+              </Col>
+            </Row>
+
+            {/* Restante */}
             <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
                 Restante:
@@ -179,6 +237,7 @@ const PaymentModal = ({
             </Row>
           </Col>
           <Col>
+            {/* Teclado numérico */}
             <Table bordered>
               <tbody>
                 {buttonsPago.map((row, rowIndex) => (
@@ -240,7 +299,7 @@ const PaymentModal = ({
         <Button
           variant="primary"
           onClick={sendRequest}
-          disabled={totalRest != 0} // Deshabilitar el botón si el totalRest es mayor a cero
+          disabled={totalRest != 0} // Deshabilitar el botón si hay monto restante
         >
           Facturar
         </Button>
