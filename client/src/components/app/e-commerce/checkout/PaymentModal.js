@@ -33,23 +33,43 @@ const PaymentModal = ({
     let efe = 0;
     let ban = 0;
     let deb = 0;
+    let cred = 0;
     let cuentaCli = 0;
     let totalResto = 0;
     if (pagoTipo === 'E') {
       efe = efectivo == 0 ? `${label}` : `${efectivo}${label}`;
-      totalResto = totalCost - efe - banco - bancoDebito - cuentaCliente;
+      totalResto =
+        totalCost - efe - banco - bancoDebito - bancoCredito - cuentaCliente;
       setEfectivo(efe);
     } else if (pagoTipo === 'B') {
       ban = banco == 0 ? `${label}` : `${banco}${label}`;
-      totalResto = totalCost - efectivo - ban - bancoDebito - cuentaCliente;
+      totalResto =
+        totalCost - efectivo - ban - bancoDebito - bancoCredito - cuentaCliente;
       setBanco(ban);
     } else if (pagoTipo === 'D') {
       deb = bancoDebito == 0 ? `${label}` : `${bancoDebito}${label}`;
-      totalResto = totalCost - efectivo - banco - cuentaCliente - deb * 1.03; // Suma el 3%
+      totalResto =
+        totalCost -
+        efectivo -
+        banco -
+        bancoCredito -
+        cuentaCliente -
+        deb * 1.03; // Suma el 3%
       setBancoDebito(deb);
+    } else if (pagoTipo === 'CR') {
+      cred = bancoCredito == 0 ? `${label}` : `${bancoCredito}${label}`;
+      totalResto =
+        totalCost -
+        efectivo -
+        banco -
+        bancoDebito -
+        cuentaCliente -
+        cred * 1.05; // Suma el 5%
+      setBancoCredito(cred);
     } else {
       cuentaCli = cuentaCliente == 0 ? `${label}` : `${cuentaCliente}${label}`;
-      totalResto = totalCost - efectivo - banco - bancoDebito - cuentaCli;
+      totalResto =
+        totalCost - efectivo - banco - bancoDebito - bancoCredito - cuentaCli;
       setCuentaCliente(cuentaCli);
     }
     setTotalRest(totalResto);
@@ -58,16 +78,21 @@ const PaymentModal = ({
   const cerarCantidadModal = () => {
     let totalResto = 0;
     if (pagoTipo === 'E') {
-      totalResto = totalCost - banco - bancoDebito - cuentaCliente;
+      totalResto =
+        totalCost - banco - bancoDebito - bancoCredito - cuentaCliente;
       setEfectivo(0);
     } else if (pagoTipo === 'B') {
-      totalResto = totalCost - efectivo - bancoDebito - cuentaCliente;
+      totalResto =
+        totalCost - efectivo - bancoDebito - bancoCredito - cuentaCliente;
       setBanco(0);
     } else if (pagoTipo === 'D') {
-      totalResto = totalCost - efectivo - banco - cuentaCliente;
+      totalResto = totalCost - efectivo - banco - bancoCredito - cuentaCliente;
       setBancoDebito(0);
+    } else if (pagoTipo === 'CR') {
+      totalResto = totalCost - efectivo - banco - bancoDebito - cuentaCliente;
+      setBancoCredito(0);
     } else {
-      totalResto = totalCost - efectivo - banco - bancoDebito;
+      totalResto = totalCost - efectivo - banco - bancoDebito - bancoCredito;
       setCuentaCliente(0);
     }
     setTotalRest(totalResto);
@@ -113,6 +138,7 @@ const PaymentModal = ({
                       newValue -
                       banco -
                       bancoDebito -
+                      bancoCredito -
                       cuentaCliente;
                     setTotalRest(totalResto);
                   }}
@@ -125,7 +151,7 @@ const PaymentModal = ({
             {/* Banco */}
             <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
-                Banco:
+                Transferencia:
               </Col>
               <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
                 <Form.Control
@@ -147,10 +173,81 @@ const PaymentModal = ({
                       efectivo -
                       newValue -
                       bancoDebito -
+                      bancoCredito -
                       cuentaCliente;
                     setTotalRest(totalResto);
                   }}
                   aria-label="Banco"
+                  className="text-end"
+                />
+              </Col>
+            </Row>
+
+            {/* Banco Débito */}
+            <Row className="gx-card mx-0">
+              <Col xs={6} md={6} className="py-2 text-end text-900">
+                Tarjeta Débito (3% adicional):
+              </Col>
+              <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
+                <Form.Control
+                  type="text"
+                  value={new Intl.NumberFormat('es-ES').format(bancoDebito)}
+                  onFocus={e => {
+                    setPagoTipoLocal('D');
+                    if (bancoDebito == 0) {
+                      setBancoDebito(totalRest * 1.03);
+                      setTotalRest(0);
+                    }
+                    e.target.select();
+                  }}
+                  onChange={e => {
+                    const newValue = e.target.value.replace(/\D/g, '');
+                    setBancoDebito(newValue);
+                    const totalResto =
+                      totalCost -
+                      efectivo -
+                      banco -
+                      bancoCredito -
+                      cuentaCliente -
+                      newValue * 1.03; // Calcula el 3% adicional
+                    setTotalRest(totalResto);
+                  }}
+                  aria-label="Banco Débito"
+                  className="text-end"
+                />
+              </Col>
+            </Row>
+
+            {/* Banco Crédito */}
+            <Row className="gx-card mx-0">
+              <Col xs={6} md={6} className="py-2 text-end text-900">
+                Tarjeta Crédito (5% adicional):
+              </Col>
+              <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
+                <Form.Control
+                  type="text"
+                  value={new Intl.NumberFormat('es-ES').format(bancoCredito)}
+                  onFocus={e => {
+                    setPagoTipoLocal('CR');
+                    if (bancoCredito == 0) {
+                      setBancoCredito(totalRest * 1.05);
+                      setTotalRest(0);
+                    }
+                    e.target.select();
+                  }}
+                  onChange={e => {
+                    const newValue = e.target.value.replace(/\D/g, '');
+                    setBancoCredito(newValue);
+                    const totalResto =
+                      totalCost -
+                      efectivo -
+                      banco -
+                      bancoDebito -
+                      cuentaCliente -
+                      newValue * 1.05; // Calcula el 3% adicional
+                    setTotalRest(totalResto);
+                  }}
+                  aria-label="Banco Débito"
                   className="text-end"
                 />
               </Col>
@@ -178,44 +275,15 @@ const PaymentModal = ({
                     const newValue = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
                     setCuentaCliente(newValue);
                     const totalResto =
-                      totalCost - efectivo - banco - newValue - bancoDebito;
-                    setTotalRest(totalResto);
-                  }}
-                  aria-label="Cuenta de cliente"
-                  className="text-end"
-                />
-              </Col>
-            </Row>
-
-            {/* Banco Débito */}
-            <Row className="gx-card mx-0">
-              <Col xs={6} md={6} className="py-2 text-end text-900">
-                Banco Débito (3% adicional):
-              </Col>
-              <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
-                <Form.Control
-                  type="text"
-                  value={new Intl.NumberFormat('es-ES').format(bancoDebito)}
-                  onFocus={e => {
-                    setPagoTipoLocal('D');
-                    if (bancoDebito == 0) {
-                      setBancoDebito(totalRest * 1.03);
-                      setTotalRest(0);
-                    }
-                    e.target.select();
-                  }}
-                  onChange={e => {
-                    const newValue = e.target.value.replace(/\D/g, '');
-                    setBancoDebito(newValue);
-                    const totalResto =
                       totalCost -
                       efectivo -
                       banco -
-                      cuentaCliente -
-                      newValue * 1.03; // Calcula el 3% adicional
+                      newValue -
+                      bancoDebito -
+                      bancoCredito;
                     setTotalRest(totalResto);
                   }}
-                  aria-label="Banco Débito"
+                  aria-label="Cuenta de cliente"
                   className="text-end"
                 />
               </Col>
