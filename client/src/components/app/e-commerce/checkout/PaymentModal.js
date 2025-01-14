@@ -113,6 +113,24 @@ const PaymentModal = ({
       <Modal.Body>
         <Row>
           <Col>
+            {/* TOTAL */}
+            <Row className="gx-card mx-0">
+              <InputGroup className="mt-3">
+                <InputGroup.Text style={{ fontSize: '30px' }}>
+                  Total
+                </InputGroup.Text>
+                <Form.Control
+                  className="text-end"
+                  style={{ color: 'green', fontSize: '30px' }}
+                  readOnly
+                  value={`Gs. ${new Intl.NumberFormat('es-ES').format(
+                    totalCost
+                  )}`}
+                  aria-label="Total"
+                />
+              </InputGroup>
+            </Row>
+
             {/* Efectivo */}
             <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
@@ -290,7 +308,22 @@ const PaymentModal = ({
             </Row>
 
             {/* Restante */}
-            <Row className="gx-card mx-0">
+            <Row className="gx-card mx-0 display-4">
+              <Col xs={6} md={6} className="py-2 text-end text-900">
+                Vuelto:
+              </Col>
+              <Col
+                xs={6}
+                md={6}
+                className="text-end py-2 text-nowrap px-x1"
+                style={{ color: totalRest < 0 ? 'red' : 'black' }}
+              >
+                {totalRest < 0
+                  ? new Intl.NumberFormat('es-ES').format(totalRest * -1)
+                  : '0'}
+              </Col>
+            </Row>
+            {/* <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
                 Restante:
               </Col>
@@ -302,7 +335,7 @@ const PaymentModal = ({
               >
                 {new Intl.NumberFormat('es-ES').format(totalRest)}
               </Col>
-            </Row>
+            </Row> */}
           </Col>
           <Col>
             {/* Teclado numérico */}
@@ -347,7 +380,7 @@ const PaymentModal = ({
                 </tr>
               </tbody>
             </Table>
-            <InputGroup className="mt-3">
+            {/* <InputGroup className="mt-3">
               <InputGroup.Text>Total</InputGroup.Text>
               <Form.Control
                 readOnly
@@ -356,7 +389,7 @@ const PaymentModal = ({
                 )}`}
                 aria-label="Total"
               />
-            </InputGroup>
+            </InputGroup> */}
           </Col>
         </Row>
       </Modal.Body>
@@ -367,7 +400,7 @@ const PaymentModal = ({
         <Button
           variant="primary"
           onClick={sendRequest}
-          disabled={totalRest != 0} // Deshabilitar el botón si hay monto restante
+          // disabled={totalRest != 0} // Deshabilitar el botón si hay monto restante
         >
           Facturar
         </Button>
