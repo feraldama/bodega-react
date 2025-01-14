@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Modal,
   Button,
@@ -115,7 +116,7 @@ const PaymentModal = ({
           <Col>
             {/* TOTAL */}
             <Row className="gx-card mx-0">
-              <InputGroup className="mt-3">
+              <InputGroup className="mb-3">
                 <InputGroup.Text style={{ fontSize: '30px' }}>
                   Total
                 </InputGroup.Text>
@@ -400,7 +401,7 @@ const PaymentModal = ({
         <Button
           variant="primary"
           onClick={sendRequest}
-          // disabled={totalRest != 0} // Deshabilitar el botón si hay monto restante
+          disabled={totalRest > 0} // Deshabilitar el botón si hay monto restante
         >
           Facturar
         </Button>
@@ -409,4 +410,26 @@ const PaymentModal = ({
   );
 };
 
+PaymentModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  totalCost: PropTypes.number.isRequired,
+  totalRest: PropTypes.number.isRequired,
+  setTotalRest: PropTypes.func.isRequired,
+  efectivo: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
+  setEfectivo: PropTypes.func.isRequired,
+  banco: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  setBanco: PropTypes.func.isRequired,
+  bancoDebito: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
+  setBancoDebito: PropTypes.func.isRequired,
+  bancoCredito: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
+  setBancoCredito: PropTypes.func.isRequired,
+  cuentaCliente: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
+  setCuentaCliente: PropTypes.func.isRequired,
+  sendRequest: PropTypes.func.isRequired
+};
 export default PaymentModal;
