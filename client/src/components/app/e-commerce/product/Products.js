@@ -227,7 +227,7 @@ const Products = () => {
             Ventatipo: 'CO',
             Pagotipo: 'E',
             Clienteid: selectedCustomer.ClienteId,
-            Efectivoreact: efectivo,
+            Efectivoreact: Number(efectivo) + Number(totalRest),
             Bancoreact: banco + bancoDebito + bancoCredito,
             Clientecuentareact: cuentaCliente
           }
