@@ -255,6 +255,8 @@ const Products = () => {
         timer: 3000,
         timerProgressBar: true,
         width: '90%',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
         didOpen: () => {
           Swal.showLoading();
           const timer = Swal.getPopup().querySelector('b');

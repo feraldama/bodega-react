@@ -143,10 +143,10 @@ const PaymentModal = ({
                   value={new Intl.NumberFormat('es-ES').format(efectivo)}
                   onFocus={e => {
                     setPagoTipoLocal('E');
-                    if (efectivo == 0) {
-                      setEfectivo(totalRest);
-                      setTotalRest(0);
-                    }
+                    // if (efectivo == 0) {
+                    //   setEfectivo(totalRest);
+                    setTotalRest(0);
+                    // }
                     e.target.select();
                   }}
                   onChange={e => {
@@ -167,7 +167,7 @@ const PaymentModal = ({
               </Col>
             </Row>
 
-            {/* Banco */}
+            {/* Transferencia */}
             <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
                 Transferencia:
@@ -401,7 +401,12 @@ const PaymentModal = ({
         <Button
           variant="primary"
           onClick={sendRequest}
-          disabled={totalRest > 0} // Deshabilitar el botón si hay monto restante
+          disabled={
+            totalRest > 0 ||
+            bancoDebito > totalCost * 1.03 ||
+            bancoCredito > totalCost * 1.05 ||
+            banco > totalCost
+          }
         >
           Facturar
         </Button>
