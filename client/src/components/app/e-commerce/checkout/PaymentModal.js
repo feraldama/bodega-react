@@ -29,6 +29,7 @@ const PaymentModal = ({
   sendRequest
 }) => {
   const [pagoTipo, setPagoTipoLocal] = useState('E');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onNumberClickModal = label => {
     let efe = 0;
@@ -97,6 +98,15 @@ const PaymentModal = ({
       setCuentaCliente(0);
     }
     setTotalRest(totalResto);
+  };
+
+  const handleSendRequest = async () => {
+    setIsSubmitting(true);
+    try {
+      await sendRequest();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const buttonsPago = [
@@ -400,8 +410,9 @@ const PaymentModal = ({
         </Button>
         <Button
           variant="primary"
-          onClick={sendRequest}
+          onClick={handleSendRequest}
           disabled={
+            isSubmitting ||
             totalRest > 0 ||
             bancoDebito > totalCost * 1.03 ||
             bancoCredito > totalCost * 1.05 ||
