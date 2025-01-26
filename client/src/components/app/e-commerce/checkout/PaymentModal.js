@@ -155,7 +155,7 @@ const PaymentModal = ({
                     setPagoTipoLocal('E');
                     // if (efectivo == 0) {
                     //   setEfectivo(totalRest);
-                    setTotalRest(0);
+                    // setTotalRest(0);
                     // }
                     e.target.select();
                   }}
