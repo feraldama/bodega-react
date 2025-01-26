@@ -405,11 +405,16 @@ const PaymentModal = ({
         </Row>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button
+          variant="secondary"
+          onClick={handleClose}
+          style={{ height: '60px' }}
+        >
           Cancelar
         </Button>
         <Button
           variant="primary"
+          style={{ height: '60px', width: '160px' }}
           onClick={handleSendRequest}
           disabled={
             isSubmitting ||

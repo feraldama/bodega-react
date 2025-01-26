@@ -7,17 +7,8 @@ import QuantityController from '../QuantityController';
 import { Buffer } from 'buffer';
 
 const CartItem = ({ product, index }) => {
-  const {
-    id,
-    files,
-    name,
-    quantity,
-    totalPrice,
-    price,
-    salePrice,
-    ProductoImagen,
-    combo
-  } = product;
+  const { id, files, name, quantity, price, salePrice, ProductoImagen, combo } =
+    product;
 
   const {
     productsState: { selectedProductId },
@@ -115,7 +106,7 @@ const CartItem = ({ product, index }) => {
     );
   };
 
-  const productoSeleccionado = e => {
+  const productoSeleccionado = () => {
     if (quantityInputRef.current) {
       quantityInputRef.current.focus();
       quantityInputRef.current.select();
@@ -204,7 +195,12 @@ const CartItem = ({ product, index }) => {
                   label="Caja"
                   checked={useSalePrice}
                   onChange={handleCheckboxChange}
-                  style={{ marginBottom: 0 }}
+                  style={{
+                    paddingTop: '16px',
+                    marginBottom: 0,
+                    transform: 'scale(1.5)',
+                    marginLeft: 'auto'
+                  }}
                 />
               </Col>
             </div>
@@ -235,7 +231,11 @@ CartItem.propTypes = {
     files: PropTypes.array.isRequired,
     name: PropTypes.string.isRequired,
     quantity: PropTypes.number.isRequired,
-    totalPrice: PropTypes.number.isRequired
+    price: PropTypes.number.isRequired,
+    salePrice: PropTypes.number.isRequired,
+    ProductoImagen: PropTypes.array.isRequired,
+    ProductoPrecioVentaMayorista: PropTypes.number.isRequired,
+    combo: PropTypes.object
   }),
   index: PropTypes.number.isRequired
 };
