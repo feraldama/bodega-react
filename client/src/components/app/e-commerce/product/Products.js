@@ -78,6 +78,11 @@ const Products = () => {
   const searchinputref = useRef(null);
 
   useEffect(() => {
+    setTotalRest(getSubtotal(cartItems));
+    setTotalCost(getSubtotal(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
     productsDispatch({
       type: 'SORT_PRODUCT',
       payload: {
@@ -145,6 +150,99 @@ const Products = () => {
     if (searchinputref.current) {
       searchinputref.current.select();
     }
+  };
+
+  const generateTicketPDF = () => {
+    // Crear una instancia de jsPDF con un tamaño personalizado (80mm de ancho)
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: [80, 297] // 80mm de ancho y 297mm de alto (A4 cortado)
+    });
+
+    const fechaActual = new Date();
+    const dia = String(fechaActual.getDate()).padStart(2, '0');
+    const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
+    const año = fechaActual.getFullYear().toString().slice(-2);
+    const horas = String(fechaActual.getHours()).padStart(2, '0');
+    const minutos = String(fechaActual.getMinutes()).padStart(2, '0');
+    const segundos = String(fechaActual.getSeconds()).padStart(2, '0');
+
+    const fechaFormateada = `${dia}/${mes}/${año}`;
+    const horaFormateada = `${horas}:${minutos}:${segundos}`;
+
+    // Configuración inicial
+    doc.setFontSize(8); // Tamaño de fuente más pequeño
+    doc.setFont('helvetica', 'normal');
+
+    // Encabezado del ticket
+    doc.text('Auto Shop Alonso', 5, 15);
+    doc.text('BODEGA', 5, 20);
+    doc.text('Bernardino Caballero c/ Antequera, Ypacaraí', 5, 25);
+    doc.text('Teléfono: +595 892 784989', 5, 30);
+    doc.text(`Fecha: ${fechaFormateada} - Hora: ${horaFormateada}`, 5, 35); // Fecha y hora actual
+    doc.text(
+      selectedCustomer.ClienteRUC
+        ? 'RUC: ' + selectedCustomer.ClienteRUC
+        : 'RUC: SIN RUC',
+      5,
+      40
+    );
+    doc.text('Cliente: ' + cliente, 5, 45);
+
+    // Línea separadora
+    doc.setLineWidth(0.2); // Línea más delgada
+    doc.line(5, 48, 75, 48); // Ajustar el ancho de la línea
+
+    // Encabezados de la tabla
+    const headers = [['Desc.', 'Cant.', 'Precio', 'Total']];
+
+    // Datos de la tabla
+    const tableData = cartItems.map(item => [
+      item.name,
+      item.quantity,
+      `Gs. ${item.salePrice.toLocaleString('es-ES')}`,
+      `Gs. ${item.totalPrice.toLocaleString('es-ES')}`
+    ]);
+
+    // Agregar la tabla al PDF
+    doc.autoTable({
+      head: headers,
+      body: tableData,
+      startY: 50,
+      theme: 'plain',
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255]
+      },
+      headStyles: { fillColor: [200, 200, 200] },
+      columnStyles: {
+        0: { cellWidth: 30 },
+        1: { cellWidth: 10 },
+        2: { cellWidth: 18 },
+        3: { cellWidth: 20 }
+      },
+      margin: { left: 5 } // Margen izquierdo
+    });
+
+    // Total de la compra
+    const totalCost = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
+    doc.text(
+      `Total a Pagar Gs. ${totalCost.toLocaleString('es-ES')}`,
+      5,
+      doc.autoTable.previous.finalY + 5
+    );
+
+    // Pie de página
+    doc.text(
+      '--GRACIAS POR SU PREFERENCIA--',
+      5,
+      doc.autoTable.previous.finalY + 10
+    );
+
+    // Guardar el PDF
+    doc.save('ticket_venta.pdf');
   };
 
   const handleNumberClick = number => {
@@ -219,11 +317,6 @@ const Products = () => {
       }
     }
   };
-
-  useEffect(() => {
-    setTotalRest(getSubtotal(cartItems));
-    setTotalCost(getSubtotal(cartItems));
-  }, [cartItems]);
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -303,6 +396,7 @@ const Products = () => {
         allowEscapeKey: false,
         didOpen: () => {
           Swal.showLoading();
+          generateTicketPDF();
           const timer = Swal.getPopup().querySelector('b');
           timerInterval = setInterval(() => {
             const secondsLeft = Math.ceil(Swal.getTimerLeft() / 1000);
