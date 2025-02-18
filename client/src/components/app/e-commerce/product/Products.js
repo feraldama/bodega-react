@@ -241,7 +241,7 @@ const Products = () => {
       }
     };
     try {
-      const response = await axios.post(
+      await axios.post(
         process.env.REACT_APP_URL +
           process.env.REACT_APP_URL_GENEXUS +
           'apventaconfirmarws',
@@ -273,7 +273,6 @@ const Products = () => {
           window.location.reload();
         }
       });
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }

@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
 //import { ProductContext } from 'context/Context';
 import { CustomerContext } from 'context/Context';
@@ -7,8 +7,8 @@ import { customersData } from 'data/ecommerce/customersData';
 // import { productReducer } from 'reducers/productReducer';
 import { customerReducer } from 'reducers/customerReducer';
 import axios from 'axios';
-import product3 from 'assets/img/products/4.jpg';
-import product2 from 'assets/img/products/2.jpg';
+// import product3 from 'assets/img/products/4.jpg';
+// import product2 from 'assets/img/products/2.jpg';
 
 const CustomerProvider = ({ children }) => {
   const initData = {
@@ -22,6 +22,14 @@ const CustomerProvider = ({ children }) => {
   );
 
   useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_API_URL + '/api/usuarioLogueado')
+      .then(function (response) {
+        console.log('log: 🚀  response usuarioLogueado:', response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     axios
       .get(process.env.REACT_APP_API_URL + '/api/clientes')
       .then(function (response) {
