@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Card, Col, Form, Row, InputGroup } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import { Button, Card, Col, Row } from 'react-bootstrap';
 import CartItem from './CartItem';
 import { ProductContext } from 'context/Context';
 import { getSubtotal } from 'helpers/utils';
-import axios from 'axios';
-import { js2xml } from 'xml-js';
-import Swal from 'sweetalert2';
 
 import '../NumericKeypad/NumericKeypad.css'; // Importa el archivo CSS
 
@@ -104,6 +102,9 @@ const ShoppingCart = ({ handleShow }) => {
       </Card>
     </>
   );
+};
+ShoppingCart.propTypes = {
+  handleShow: PropTypes.func.isRequired
 };
 
 export default ShoppingCart;

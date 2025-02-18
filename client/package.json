@@ -39,6 +39,8 @@
     "emoji-mart": "^5.3.3",
     "fuse.js": "^6.4.6",
     "is_js": "^0.9.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "leaflet": "^1.9.3",
     "leaflet.tilelayer.colorfilter": "^1.2.5",
     "lottie-react": "^2.3.1",

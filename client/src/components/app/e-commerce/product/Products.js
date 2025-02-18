@@ -25,6 +25,8 @@ import { getSubtotal } from 'helpers/utils';
 import axios from 'axios';
 import { js2xml } from 'xml-js';
 import Swal from 'sweetalert2';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const Products = () => {
   const {
@@ -96,6 +98,48 @@ const Products = () => {
       searchinputref.current.focus();
     }
   }, []);
+
+  const generatePDF = () => {
+    // Crear una instancia de jsPDF
+    const doc = new jsPDF();
+
+    // Título del PDF
+    doc.setFontSize(18);
+    doc.text('Presupuesto', 14, 12);
+    doc.setFontSize(14);
+    doc.text('Cliente:', 14, 20);
+    doc.text(cliente, 35, 20);
+
+    // Datos de la tabla
+    const tableData = cartItems.map(item => [
+      item.name,
+      item.quantity,
+      `Gs. ${item.salePrice.toLocaleString('es-ES')}`,
+      `Gs. ${item.totalPrice.toLocaleString('es-ES')}`
+    ]);
+
+    // Encabezados de la tabla
+    const headers = [['Producto', 'Cantidad', 'Precio Unitario', 'Total']];
+
+    // Agregar la tabla al PDF
+    doc.autoTable({
+      head: headers,
+      body: tableData,
+      startY: 26 // Posición inicial de la tabla
+    });
+
+    // Total de la compra
+    const totalCost = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
+    doc.setFontSize(14);
+    doc.text(
+      `Total: Gs. ${totalCost.toLocaleString('es-ES')}`,
+      14,
+      doc.autoTable.previous.finalY + 10
+    );
+
+    // Guardar el PDF
+    doc.save('detalle_compra.pdf');
+  };
 
   const handleFocus = () => {
     if (searchinputref.current) {
@@ -303,6 +347,7 @@ const Products = () => {
             handleShow={handleShow}
             cliente={cliente}
             handleCustomerModalShow={handleCustomerModalShow}
+            generatePDF={generatePDF}
           />
         </Card>
       </Col>

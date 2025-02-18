@@ -1,13 +1,15 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Button, Table, Col, Row } from 'react-bootstrap';
 import './NumericKeypad.css';
 import { ProductContext } from 'context/Context';
+import PropTypes from 'prop-types';
 
 const NumericKeypad = ({
   onNumberClick,
   handleShow,
   cliente,
-  handleCustomerModalShow
+  handleCustomerModalShow,
+  generatePDF
 }) => {
   const {
     productsState: { selectedProductId, cartItems },
@@ -17,7 +19,7 @@ const NumericKeypad = ({
   const buttons = [
     [1, 2, 3, 'Cant.'],
     [4, 5, 6, '% de desc.'],
-    [7, 8, 9, 'Precio'],
+    [7, 8, 9, 'Presupuesto'],
     ['.', 0, ',', 'Borrar']
   ];
 
@@ -85,8 +87,8 @@ const NumericKeypad = ({
                           console.log('log: 🚀 Cant:');
                         } else if (label === '% de desc.') {
                           console.log('log: 🚀 desc:');
-                        } else if (label === 'Precio') {
-                          console.log('log: 🚀 Precio:');
+                        } else if (label === 'Presupuesto') {
+                          generatePDF();
                         } else if (label === '+/-') {
                           console.log('log: 🚀 +/-:');
                         } else if (label === ',') {
@@ -120,6 +122,13 @@ const NumericKeypad = ({
       </Table>
     </>
   );
+};
+NumericKeypad.propTypes = {
+  onNumberClick: PropTypes.func.isRequired,
+  handleShow: PropTypes.func.isRequired,
+  cliente: PropTypes.string.isRequired,
+  handleCustomerModalShow: PropTypes.func.isRequired,
+  generatePDF: PropTypes.func.isRequired
 };
 
 export default NumericKeypad;
