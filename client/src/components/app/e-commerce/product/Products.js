@@ -138,7 +138,7 @@ const Products = () => {
     );
 
     // Guardar el PDF
-    doc.save('detalle_compra.pdf');
+    doc.save('detalle_presupuesto.pdf');
   };
 
   const handleFocus = () => {
