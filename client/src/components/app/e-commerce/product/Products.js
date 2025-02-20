@@ -195,13 +195,15 @@ const Products = () => {
     doc.line(0, 48, 75, 48); // Ajustar el ancho de la línea
 
     // Encabezados de la tabla
-    const headers = [['Desc.', 'Cant.', 'Precio', 'Total']];
+    const headers = [['Desc.', 'Cant', 'Precio', 'Total']];
 
     // Datos de la tabla
     const tableData = cartItems.map(item => [
       item.name,
       item.quantity,
-      `Gs. ${item.salePrice.toLocaleString('es-ES')}`,
+      item.unidad == 'U'
+        ? item.salePrice.toLocaleString('es-ES')
+        : item.price.toLocaleString('es-ES'),
       `Gs. ${item.totalPrice.toLocaleString('es-ES')}`
     ]);
 
@@ -219,8 +221,8 @@ const Products = () => {
       // headStyles: { fillColor: [200, 200, 200] },
       columnStyles: {
         0: { cellWidth: 30 },
-        1: { cellWidth: 10 },
-        2: { cellWidth: 16 },
+        1: { cellWidth: 9 },
+        2: { cellWidth: 14 },
         3: { cellWidth: 20 }
       },
       margin: { left: 0 } // Margen izquierdo
