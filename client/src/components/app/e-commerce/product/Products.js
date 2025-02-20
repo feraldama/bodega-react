@@ -176,23 +176,23 @@ const Products = () => {
     doc.setFont('helvetica', 'normal');
 
     // Encabezado del ticket
-    doc.text('Auto Shop Alonso', 5, 15);
-    doc.text('BODEGA', 5, 20);
-    doc.text('Bernardino Caballero c/ Antequera, Ypacaraí', 5, 25);
-    doc.text('Teléfono: +595 892 784989', 5, 30);
-    doc.text(`Fecha: ${fechaFormateada} - Hora: ${horaFormateada}`, 5, 35); // Fecha y hora actual
+    doc.text('Auto Shop Alonso', 0, 15);
+    doc.text('BODEGA', 0, 20);
+    doc.text('Bernardino Caballero c/ Antequera, Ypacaraí', 0, 25);
+    doc.text('Teléfono: +595 892 784989', 0, 30);
+    doc.text(`Fecha: ${fechaFormateada} - Hora: ${horaFormateada}`, 0, 35);
     doc.text(
       selectedCustomer.ClienteRUC
         ? 'RUC: ' + selectedCustomer.ClienteRUC
         : 'RUC: SIN RUC',
-      5,
+      0,
       40
     );
-    doc.text('Cliente: ' + cliente, 5, 45);
+    doc.text('Cliente: ' + cliente, 0, 45);
 
     // Línea separadora
     doc.setLineWidth(0.2); // Línea más delgada
-    doc.line(5, 48, 75, 48); // Ajustar el ancho de la línea
+    doc.line(0, 48, 75, 48); // Ajustar el ancho de la línea
 
     // Encabezados de la tabla
     const headers = [['Desc.', 'Cant.', 'Precio', 'Total']];
@@ -216,28 +216,28 @@ const Products = () => {
         textColor: [0, 0, 0],
         fillColor: [255, 255, 255]
       },
-      headStyles: { fillColor: [200, 200, 200] },
+      // headStyles: { fillColor: [200, 200, 200] },
       columnStyles: {
         0: { cellWidth: 30 },
         1: { cellWidth: 10 },
-        2: { cellWidth: 18 },
+        2: { cellWidth: 16 },
         3: { cellWidth: 20 }
       },
-      margin: { left: 5 } // Margen izquierdo
+      margin: { left: 0 } // Margen izquierdo
     });
 
     // Total de la compra
     const totalCost = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
     doc.text(
       `Total a Pagar Gs. ${totalCost.toLocaleString('es-ES')}`,
-      5,
+      0,
       doc.autoTable.previous.finalY + 5
     );
 
     // Pie de página
     doc.text(
       '--GRACIAS POR SU PREFERENCIA--',
-      5,
+      0,
       doc.autoTable.previous.finalY + 10
     );
 
