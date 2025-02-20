@@ -365,7 +365,8 @@ const Products = () => {
             Pagotipo: 'E',
             Clienteid: selectedCustomer.ClienteId,
             Efectivoreact: Number(efectivo) + Number(totalRest),
-            Bancoreact: banco + bancoDebito + bancoCredito,
+            Bancoreact:
+              Number(banco) + Number(bancoDebito) + Number(bancoCredito),
             Clientecuentareact: cuentaCliente
           }
         }
