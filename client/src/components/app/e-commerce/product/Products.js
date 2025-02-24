@@ -59,6 +59,7 @@ const Products = () => {
   const layout = productLayout.split(/-/)[1];
   const isList = layout === 'list';
   const isGrid = layout === 'grid';
+  const [printTicket, setPrintTicket] = useState(false);
 
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -399,7 +400,9 @@ const Products = () => {
         allowEscapeKey: false,
         didOpen: () => {
           Swal.showLoading();
-          generateTicketPDF();
+          if (printTicket) {
+            generateTicketPDF();
+          }
           const timer = Swal.getPopup().querySelector('b');
           timerInterval = setInterval(() => {
             const secondsLeft = Math.ceil(Swal.getTimerLeft() / 1000);
@@ -600,6 +603,8 @@ const Products = () => {
         setTotalRest={setTotalRest}
         efectivo={efectivo}
         setEfectivo={setEfectivo}
+        setPrintTicket={setPrintTicket}
+        printTicket={printTicket}
         banco={banco}
         setBanco={setBanco}
         bancoDebito={bancoDebito}

@@ -26,7 +26,9 @@ const PaymentModal = ({
   setBancoCredito,
   cuentaCliente,
   setCuentaCliente,
-  sendRequest
+  sendRequest,
+  setPrintTicket,
+  printTicket
 }) => {
   const [pagoTipo, setPagoTipoLocal] = useState('E');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -405,6 +407,19 @@ const PaymentModal = ({
         </Row>
       </Modal.Body>
       <Modal.Footer>
+        <Form.Check
+          type="checkbox"
+          label="Imprimir ticket"
+          checked={printTicket}
+          onChange={e => setPrintTicket(e.target.checked)}
+          className="me-auto"
+          style={{
+            // paddingTop: '16px',
+            // marginBottom: 0,
+            transform: 'scale(1.5)',
+            marginLeft: 'auto'
+          }}
+        />
         <Button
           variant="secondary"
           onClick={handleClose}
@@ -451,6 +466,8 @@ PaymentModal.propTypes = {
   cuentaCliente: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
     .isRequired,
   setCuentaCliente: PropTypes.func.isRequired,
-  sendRequest: PropTypes.func.isRequired
+  setPrintTicket: PropTypes.func.isRequired,
+  sendRequest: PropTypes.func.isRequired,
+  printTicket: PropTypes.func.isRequired
 };
 export default PaymentModal;
