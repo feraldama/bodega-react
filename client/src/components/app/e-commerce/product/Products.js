@@ -177,10 +177,10 @@ const Products = () => {
     doc.setFont('helvetica', 'normal');
 
     // Encabezado del ticket
-    doc.text('Auto Shop Alonso', 0, 15);
-    doc.text('BODEGA', 0, 20);
-    doc.text('Bernardino Caballero c/ Antequera, Ypacaraí', 0, 25);
-    doc.text('Teléfono: +595 892 784989', 0, 30);
+    doc.text('Winners Temple', 0, 15);
+    doc.text('PADEL', 0, 20);
+    doc.text('Carmen de Peña, Itauguá', 0, 25);
+    doc.text('Teléfono: +595 981 123456', 0, 30);
     doc.text(`Fecha: ${fechaFormateada} - Hora: ${horaFormateada}`, 0, 35);
     doc.text(
       selectedCustomer.ClienteRUC
@@ -252,71 +252,77 @@ const Products = () => {
     if (selectedProductId !== null) {
       // const cartProduct = cartItems.find(item => item.id === selectedProductId);
       const cartProduct = cartItems[selectedProductId];
-      const comboProduct = productsCombos.find(
-        item => item.ProductoId === cartProduct.id
-      );
-      const precioCombo = () => {
-        // Verificar si ComboPrecio está definido
-        return !!comboProduct?.ComboPrecio;
-      };
-      const comboExist = precioCombo();
-      // Calcular la nueva cantidad total en el carrito después de agregar uno más
-      const newQuantity =
-        cartProduct.quantity == 0 ? number : `${cartProduct.quantity}${number}`;
-      if (
-        comboProduct?.ComboCantidad <= newQuantity &&
-        cartProduct.unidad == 'U'
-      ) {
-        // Calcular cuántos combos completos se pueden formar
-        const numCombos = Math.floor(newQuantity / comboProduct.ComboCantidad);
-        const remainingItems = newQuantity % comboProduct.ComboCantidad;
+      if (cartProduct.id !== 1 && cartProduct.id !== 2) {
+        const comboProduct = productsCombos.find(
+          item => item.ProductoId === cartProduct.id
+        );
+        const precioCombo = () => {
+          // Verificar si ComboPrecio está definido
+          return !!comboProduct?.ComboPrecio;
+        };
+        const comboExist = precioCombo();
+        // Calcular la nueva cantidad total en el carrito después de agregar uno más
+        const newQuantity =
+          cartProduct.quantity == 0
+            ? number
+            : `${cartProduct.quantity}${number}`;
+        if (
+          comboProduct?.ComboCantidad <= newQuantity &&
+          cartProduct.unidad == 'U'
+        ) {
+          // Calcular cuántos combos completos se pueden formar
+          const numCombos = Math.floor(
+            newQuantity / comboProduct.ComboCantidad
+          );
+          const remainingItems = newQuantity % comboProduct.ComboCantidad;
 
-        // Calcular el precio total
-        const totalPrice =
-          numCombos * comboProduct.ComboPrecio +
-          remainingItems *
-            (cartProduct.unidad === 'U'
-              ? cartProduct.salePrice
-              : cartProduct.price);
+          // Calcular el precio total
+          const totalPrice =
+            numCombos * comboProduct.ComboPrecio +
+            remainingItems *
+              (cartProduct.unidad === 'U'
+                ? cartProduct.salePrice
+                : cartProduct.price);
 
-        productsDispatch({
-          type: 'UPDATE_CART_ITEM',
-          payload: {
-            product: {
-              ...cartProduct,
+          productsDispatch({
+            type: 'UPDATE_CART_ITEM',
+            payload: {
+              product: {
+                ...cartProduct,
+                quantity: newQuantity,
+                totalPrice:
+                  cartProduct.unidad === 'U'
+                    ? totalPrice
+                    : (cartProduct.quantity + 1) * cartProduct.price,
+                unidad: cartProduct.unidad,
+                combo: comboExist && comboProduct
+              },
               quantity: newQuantity,
-              totalPrice:
-                cartProduct.unidad === 'U'
-                  ? totalPrice
-                  : (cartProduct.quantity + 1) * cartProduct.price,
-              unidad: cartProduct.unidad,
-              combo: comboExist && comboProduct
-            },
-            quantity: newQuantity,
-            index: selectedProductId
-          }
-        });
-      } else {
-        productsDispatch({
-          type: 'UPDATE_CART_ITEM',
-          payload: {
-            product: {
-              ...cartProduct,
-              // quantity: cartProduct.quantity + 1,
+              index: selectedProductId
+            }
+          });
+        } else {
+          productsDispatch({
+            type: 'UPDATE_CART_ITEM',
+            payload: {
+              product: {
+                ...cartProduct,
+                // quantity: cartProduct.quantity + 1,
+                quantity: newQuantity,
+                totalPrice:
+                  cartProduct.unidad == 'U'
+                    ? newQuantity * cartProduct.salePrice
+                    : selectedCustomer.ClienteTipo == 'MI'
+                    ? newQuantity * cartProduct.price
+                    : newQuantity * cartProduct.ProductoPrecioVentaMayorista,
+                // newQuantity * cartProduct.price, //product.price,
+                unidad: cartProduct.unidad
+              },
               quantity: newQuantity,
-              totalPrice:
-                cartProduct.unidad == 'U'
-                  ? newQuantity * cartProduct.salePrice
-                  : selectedCustomer.ClienteTipo == 'MI'
-                  ? newQuantity * cartProduct.price
-                  : newQuantity * cartProduct.ProductoPrecioVentaMayorista,
-              // newQuantity * cartProduct.price, //product.price,
-              unidad: cartProduct.unidad
-            },
-            quantity: newQuantity,
-            index: selectedProductId
-          }
-        });
+              index: selectedProductId
+            }
+          });
+        }
       }
     }
   };
@@ -353,7 +359,7 @@ const Products = () => {
         _attributes: { xmlns: 'http://schemas.xmlsoap.org/soap/envelope/' },
         Body: {
           'PVentaConfirmarWS.VENTACONFIRMAR': {
-            _attributes: { xmlns: 'Alonso' },
+            _attributes: { xmlns: 'Winners' },
             Sdtproducto: {
               SDTProductoItem: SDTProductoItem
             },

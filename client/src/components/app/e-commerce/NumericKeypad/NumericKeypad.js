@@ -27,19 +27,21 @@ const NumericKeypad = ({
     if (selectedProductId !== null) {
       // const cartProduct = cartItems.find(item => item.id === selectedProductId);
       const cartProduct = cartItems[selectedProductId];
-      productsDispatch({
-        type: 'UPDATE_CART_ITEM',
-        payload: {
-          product: {
-            ...cartProduct,
+      if (cartProduct.id !== 1 && cartProduct.id !== 2) {
+        productsDispatch({
+          type: 'UPDATE_CART_ITEM',
+          payload: {
+            product: {
+              ...cartProduct,
+              quantity: 0,
+              totalPrice: 0, //product.price,
+              unidad: cartProduct.unidad
+            },
             quantity: 0,
-            totalPrice: 0, //product.price,
-            unidad: cartProduct.unidad
-          },
-          quantity: 0,
-          index: selectedProductId
-        }
-      });
+            index: selectedProductId
+          }
+        });
+      }
     }
   };
 

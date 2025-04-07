@@ -20,36 +20,46 @@ const CartItem = ({ product, index }) => {
   } = useContext(CustomerContext);
 
   const [useSalePrice, setUseSalePrice] = useState(false);
+  const [editablePrice, setEditablePrice] = useState(salePrice);
+  const [isEditingPrice, setIsEditingPrice] = useState(false);
+
+  // Efecto para actualizar el precio editable cuando cambia salePrice
+  useEffect(() => {
+    setEditablePrice(salePrice);
+  }, [salePrice]);
 
   const formattedPrice = new Intl.NumberFormat('es-ES').format(
-    useSalePrice
+    id === 1 || id === 2
+      ? editablePrice
+      : useSalePrice
       ? selectedCustomer?.ClienteTipo == 'MI'
         ? price
         : product.ProductoPrecioVentaMayorista
       : salePrice
   );
 
-  // Calcular formattedTotalPrice utilizando la lógica del combo
   const calculateTotalPrice = () => {
+    // Precio base que usaremos para los cálculos
+    const basePrice =
+      id === 1 || id === 2
+        ? editablePrice
+        : useSalePrice
+        ? selectedCustomer?.ClienteTipo == 'MI'
+          ? price
+          : product.ProductoPrecioVentaMayorista
+        : salePrice;
+
     if (combo && quantity >= combo.ComboCantidad) {
-      const numCombos = Math.floor(quantity / combo.ComboCantidad); // Número de combos completos
-      const remainingItems = quantity % combo.ComboCantidad; // Cantidad restante
-      const comboTotalPrice = numCombos * combo.ComboPrecio; // Precio total de los combos completos
-      const remainingTotalPrice =
-        remainingItems * (useSalePrice ? price : salePrice); // Precio total de los elementos restantes
-      return useSalePrice
+      const numCombos = Math.floor(quantity / combo.ComboCantidad);
+      const remainingItems = quantity % combo.ComboCantidad;
+      const comboTotalPrice = numCombos * combo.ComboPrecio;
+      const remainingTotalPrice = remainingItems * basePrice;
+
+      return useSalePrice && id !== 1
         ? quantity * price
-        : comboTotalPrice + remainingTotalPrice; // Precio total
+        : comboTotalPrice + remainingTotalPrice;
     } else {
-      return (
-        quantity *
-        (useSalePrice
-          ? selectedCustomer?.ClienteTipo == 'MI'
-            ? price
-            : product.ProductoPrecioVentaMayorista
-          : salePrice)
-      );
-      // return quantity * (useSalePrice ? price : salePrice);
+      return quantity * basePrice;
     }
   };
 
@@ -60,6 +70,7 @@ const CartItem = ({ product, index }) => {
   const { handleAddToCart } = useProductHook(product);
 
   const quantityInputRef = useRef(null);
+  const priceInputRef = useRef(null);
 
   const handleRemove = () => {
     productsDispatch({
@@ -69,19 +80,21 @@ const CartItem = ({ product, index }) => {
   };
 
   const handleIncrease = () => {
-    handleAddToCart(
-      parseInt(quantity + 1),
-      useSalePrice ? price : salePrice,
-      useSalePrice ? 'C' : 'U',
-      index
-    );
+    if (id !== 1 && id !== 2) {
+      handleAddToCart(
+        parseInt(quantity + 1),
+        useSalePrice ? price : editablePrice,
+        useSalePrice ? 'C' : 'U',
+        index
+      );
+    }
   };
 
   const handleDecrease = () => {
-    if (quantity > 0) {
+    if (quantity > 0 && id !== 1 && id !== 2) {
       handleAddToCart(
         parseInt(quantity - 1),
-        useSalePrice ? price : salePrice,
+        useSalePrice ? price : editablePrice,
         useSalePrice ? 'C' : 'U',
         index
       );
@@ -89,21 +102,58 @@ const CartItem = ({ product, index }) => {
   };
 
   const handleChange = e => {
-    handleAddToCart(
-      parseInt(e.target.value < 1 ? 0 : e.target.value),
-      useSalePrice ? price : salePrice,
-      useSalePrice ? 'C' : 'U',
-      index
-    );
+    if (id !== 1 && id !== 2) {
+      handleAddToCart(
+        parseInt(e.target.value < 1 ? 0 : e.target.value),
+        useSalePrice ? price : editablePrice,
+        useSalePrice ? 'C' : 'U',
+        index
+      );
+    }
   };
 
   const handleChangeSalePrice = () => {
     handleAddToCart(
       parseInt(quantity),
-      useSalePrice ? price : salePrice,
+      useSalePrice ? price : editablePrice,
       useSalePrice ? 'C' : 'U',
       index
     );
+  };
+
+  const handlePriceChange = e => {
+    const newPrice = parseFloat(e.target.value) || 0;
+    setEditablePrice(newPrice);
+    // Actualiza el totalPrice inmediatamente
+    productsDispatch({
+      type: 'UPDATE_CART_ITEM',
+      payload: {
+        product: {
+          ...product,
+          salePrice: newPrice,
+          totalPrice: quantity * newPrice
+        },
+        quantity: quantity,
+        index: index
+      }
+    });
+  };
+
+  const handlePriceBlur = () => {
+    setIsEditingPrice(false);
+    // Actualiza el producto en el carrito con el nuevo precio
+    productsDispatch({
+      type: 'UPDATE_CART_ITEM',
+      payload: {
+        product: {
+          ...product,
+          salePrice: editablePrice,
+          totalPrice: quantity * editablePrice
+        },
+        quantity: quantity,
+        index: index
+      }
+    });
   };
 
   const productoSeleccionado = () => {
@@ -118,7 +168,42 @@ const CartItem = ({ product, index }) => {
   };
 
   const handleCheckboxChange = () => {
-    setUseSalePrice(!useSalePrice);
+    if (id !== 1 && id !== 2) {
+      const newUseSalePrice = !useSalePrice;
+      setUseSalePrice(newUseSalePrice);
+
+      const basePrice = newUseSalePrice
+        ? selectedCustomer?.ClienteTipo == 'MI'
+          ? price
+          : product.ProductoPrecioVentaMayorista
+        : salePrice;
+
+      productsDispatch({
+        type: 'UPDATE_CART_ITEM',
+        payload: {
+          product: {
+            ...product,
+            salePrice: basePrice,
+            totalPrice: quantity * basePrice,
+            unidad: newUseSalePrice ? 'C' : 'U'
+          },
+          quantity: quantity,
+          index: index
+        }
+      });
+    }
+  };
+
+  const handlePriceClick = () => {
+    if (id === 1 || id === 2) {
+      setIsEditingPrice(true);
+      setTimeout(() => {
+        if (priceInputRef.current) {
+          priceInputRef.current.focus();
+          priceInputRef.current.select();
+        }
+      }, 0);
+    }
   };
 
   useEffect(() => {
@@ -126,7 +211,7 @@ const CartItem = ({ product, index }) => {
   }, [useSalePrice]);
 
   useEffect(() => {
-    if (quantityInputRef.current) {
+    if (quantityInputRef.current && id !== 1 && id !== 2) {
       quantityInputRef.current.focus();
       quantityInputRef.current.select();
     }
@@ -177,40 +262,58 @@ const CartItem = ({ product, index }) => {
             className="d-flex justify-content-end justify-content-md-center"
           >
             <div>
-              <QuantityController
-                ref={quantityInputRef}
-                quantity={quantity}
-                handleChange={handleChange}
-                handleIncrease={handleIncrease}
-                handleDecrease={handleDecrease}
-                btnClassName="px-2"
-              />
-              <Col
-                md={{ span: 4, order: 1 }}
-                xs={{ order: 0 }}
-                className="d-flex justify-content-end align-items-center"
-              >
-                <Form.Check
-                  type="checkbox"
-                  label="Caja"
-                  checked={useSalePrice}
-                  onChange={handleCheckboxChange}
-                  style={{
-                    paddingTop: '16px',
-                    marginBottom: 0,
-                    transform: 'scale(1.5)',
-                    marginLeft: 'auto'
-                  }}
-                />
-              </Col>
+              {id !== 1 && id !== 2 && (
+                <>
+                  <QuantityController
+                    ref={quantityInputRef}
+                    quantity={quantity}
+                    handleChange={handleChange}
+                    handleIncrease={handleIncrease}
+                    handleDecrease={handleDecrease}
+                    btnClassName="px-2"
+                  />
+                  <Col
+                    md={{ span: 4, order: 1 }}
+                    xs={{ order: 0 }}
+                    className="d-flex justify-content-end align-items-center"
+                  >
+                    <Form.Check
+                      type="checkbox"
+                      label="Caja"
+                      checked={useSalePrice}
+                      onChange={handleCheckboxChange}
+                      style={{
+                        paddingTop: '16px',
+                        marginBottom: 0,
+                        transform: 'scale(1.5)',
+                        marginLeft: 'auto'
+                      }}
+                    />
+                  </Col>
+                </>
+              )}
             </div>
           </Col>
           <Col
             md={{ span: 4, order: 1 }}
             xs={{ order: 0 }}
             className="d-none d-md-block text-end ps-0 mb-2 mb-md-0 text-600"
+            onClick={handlePriceClick}
           >
-            Gs. {formattedPrice}
+            {(id === 1 || id === 2) && isEditingPrice ? (
+              <Form.Control
+                ref={priceInputRef}
+                type="number"
+                value={editablePrice}
+                onChange={handlePriceChange}
+                onBlur={handlePriceBlur}
+                onKeyPress={e => e.key === 'Enter' && handlePriceBlur()}
+                className="text-end"
+                style={{ width: '100px', display: 'inline-block' }}
+              />
+            ) : (
+              `Gs. ${formattedPrice}`
+            )}
           </Col>
           <Col
             md={{ span: 4, order: 2 }}
