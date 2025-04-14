@@ -80,7 +80,7 @@ const ProductGrid = ({ product, index, ...rest }) => {
             </h5>
 
             <p className="fs-10 mb-1">
-              Stock Caja:{' '}
+              Stock:{' '}
               <strong
                 className={classNames({
                   'text-success': ProductoStock > 0,
