@@ -26,6 +26,8 @@ const PaymentModal = ({
   setBancoCredito,
   cuentaCliente,
   setCuentaCliente,
+  voucher,
+  setVoucher,
   sendRequest,
   setPrintTicket,
   printTicket
@@ -39,16 +41,30 @@ const PaymentModal = ({
     let deb = 0;
     let cred = 0;
     let cuentaCli = 0;
+    let vou = 0;
     let totalResto = 0;
+
     if (pagoTipo === 'E') {
       efe = efectivo == 0 ? `${label}` : `${efectivo}${label}`;
       totalResto =
-        totalCost - efe - banco - bancoDebito - bancoCredito - cuentaCliente;
+        totalCost -
+        efe -
+        banco -
+        bancoDebito -
+        bancoCredito -
+        cuentaCliente -
+        voucher;
       setEfectivo(efe);
     } else if (pagoTipo === 'B') {
       ban = banco == 0 ? `${label}` : `${banco}${label}`;
       totalResto =
-        totalCost - efectivo - ban - bancoDebito - bancoCredito - cuentaCliente;
+        totalCost -
+        efectivo -
+        ban -
+        bancoDebito -
+        bancoCredito -
+        cuentaCliente -
+        voucher;
       setBanco(ban);
     } else if (pagoTipo === 'D') {
       deb = bancoDebito == 0 ? `${label}` : `${bancoDebito}${label}`;
@@ -58,7 +74,8 @@ const PaymentModal = ({
         banco -
         bancoCredito -
         cuentaCliente -
-        deb * 1.03; // Suma el 3%
+        voucher -
+        deb * 1.03;
       setBancoDebito(deb);
     } else if (pagoTipo === 'CR') {
       cred = bancoCredito == 0 ? `${label}` : `${bancoCredito}${label}`;
@@ -68,13 +85,33 @@ const PaymentModal = ({
         banco -
         bancoDebito -
         cuentaCliente -
-        cred * 1.05; // Suma el 5%
+        voucher -
+        cred * 1.05;
       setBancoCredito(cred);
-    } else {
+    } else if (pagoTipo === 'C') {
+      //cuentaCliente
       cuentaCli = cuentaCliente == 0 ? `${label}` : `${cuentaCliente}${label}`;
       totalResto =
-        totalCost - efectivo - banco - bancoDebito - bancoCredito - cuentaCli;
+        totalCost -
+        efectivo -
+        banco -
+        bancoDebito -
+        bancoCredito -
+        voucher -
+        cuentaCli;
       setCuentaCliente(cuentaCli);
+    } else if (pagoTipo === 'V') {
+      // Nuevo caso para voucher
+      vou = voucher == 0 ? `${label}` : `${voucher}${label}`;
+      totalResto =
+        totalCost -
+        efectivo -
+        banco -
+        bancoDebito -
+        bancoCredito -
+        cuentaCliente -
+        vou;
+      setVoucher(vou);
     }
     setTotalRest(totalResto);
   };
@@ -83,21 +120,45 @@ const PaymentModal = ({
     let totalResto = 0;
     if (pagoTipo === 'E') {
       totalResto =
-        totalCost - banco - bancoDebito - bancoCredito - cuentaCliente;
+        totalCost -
+        banco -
+        bancoDebito -
+        bancoCredito -
+        cuentaCliente -
+        voucher;
       setEfectivo(0);
     } else if (pagoTipo === 'B') {
       totalResto =
-        totalCost - efectivo - bancoDebito - bancoCredito - cuentaCliente;
+        totalCost -
+        efectivo -
+        bancoDebito -
+        bancoCredito -
+        cuentaCliente -
+        voucher;
       setBanco(0);
     } else if (pagoTipo === 'D') {
-      totalResto = totalCost - efectivo - banco - bancoCredito - cuentaCliente;
+      totalResto =
+        totalCost - efectivo - banco - bancoCredito - cuentaCliente - voucher;
       setBancoDebito(0);
     } else if (pagoTipo === 'CR') {
-      totalResto = totalCost - efectivo - banco - bancoDebito - cuentaCliente;
+      totalResto =
+        totalCost - efectivo - banco - bancoDebito - cuentaCliente - voucher;
       setBancoCredito(0);
-    } else {
-      totalResto = totalCost - efectivo - banco - bancoDebito - bancoCredito;
+    } else if (pagoTipo === 'C') {
+      //cuentaCliente
+      totalResto =
+        totalCost - efectivo - banco - bancoDebito - bancoCredito - voucher;
       setCuentaCliente(0);
+    } else if (pagoTipo === 'V') {
+      // Nuevo caso para voucher
+      totalResto =
+        totalCost -
+        efectivo -
+        banco -
+        bancoDebito -
+        bancoCredito -
+        cuentaCliente;
+      setVoucher(0);
     }
     setTotalRest(totalResto);
   };
@@ -209,6 +270,42 @@ const PaymentModal = ({
                     setTotalRest(totalResto);
                   }}
                   aria-label="Banco"
+                  className="text-end"
+                />
+              </Col>
+            </Row>
+
+            {/* Voucher */}
+            <Row className="gx-card mx-0">
+              <Col xs={6} md={6} className="py-2 text-end text-900">
+                Voucher:
+              </Col>
+              <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
+                <Form.Control
+                  type="text"
+                  value={new Intl.NumberFormat('es-ES').format(voucher)}
+                  onFocus={e => {
+                    setPagoTipoLocal('V');
+                    if (voucher == 0) {
+                      setVoucher(totalRest);
+                      setTotalRest(0);
+                    }
+                    e.target.select();
+                  }}
+                  onChange={e => {
+                    const newValue = e.target.value.replace(/\D/g, '');
+                    setVoucher(newValue);
+                    const totalResto =
+                      totalCost -
+                      efectivo -
+                      banco -
+                      bancoDebito -
+                      bancoCredito -
+                      cuentaCliente -
+                      newValue;
+                    setTotalRest(totalResto);
+                  }}
+                  aria-label="Voucher"
                   className="text-end"
                 />
               </Col>
@@ -436,7 +533,8 @@ const PaymentModal = ({
             totalRest > 0 ||
             bancoDebito > totalCost * 1.03 ||
             bancoCredito > totalCost * 1.05 ||
-            banco > totalCost
+            banco > totalCost ||
+            voucher > totalCost
           }
         >
           Facturar
@@ -455,6 +553,8 @@ PaymentModal.propTypes = {
   efectivo: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
     .isRequired,
   setEfectivo: PropTypes.func.isRequired,
+  voucher: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  setVoucher: PropTypes.func.isRequired,
   banco: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   setBanco: PropTypes.func.isRequired,
   bancoDebito: PropTypes.oneOfType([PropTypes.number, PropTypes.string])

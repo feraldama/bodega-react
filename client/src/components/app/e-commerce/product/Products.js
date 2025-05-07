@@ -50,6 +50,7 @@ const Products = () => {
     selectedCustomer.ClienteNombre + ' ' + selectedCustomer.ClienteApellido
   );
   const [efectivo, setEfectivo] = useState(0);
+  const [voucher, setVoucher] = useState(0);
   const [banco, setBanco] = useState(0);
   const [bancoDebito, setBancoDebito] = useState(0);
   const [bancoCredito, setBancoCredito] = useState(0);
@@ -341,6 +342,7 @@ const Products = () => {
     if (mes < 10) mes = '0' + mes;
     if (año < 10) año = '0' + año;
     const fechaFormateada = `${dia}/${mes}/${año}`;
+
     const SDTProductoItem = cartItems.map(producto => ({
       ClienteId: selectedCustomer.ClienteId,
       Producto: {
@@ -354,6 +356,7 @@ const Products = () => {
         ComboPrecio: 0
       }
     }));
+
     const json = {
       Envelope: {
         _attributes: { xmlns: 'http://schemas.xmlsoap.org/soap/envelope/' },
@@ -376,7 +379,8 @@ const Products = () => {
             Efectivoreact: Number(efectivo) + Number(totalRest),
             Bancoreact:
               Number(banco) + Number(bancoDebito) + Number(bancoCredito),
-            Clientecuentareact: cuentaCliente
+            Clientecuentareact: cuentaCliente,
+            Voucherreact: voucher
           }
         }
       }
@@ -620,6 +624,8 @@ const Products = () => {
         cuentaCliente={cuentaCliente}
         setCuentaCliente={setCuentaCliente}
         sendRequest={sendRequest}
+        voucher={voucher}
+        setVoucher={setVoucher}
       />
 
       <CustomerModal
