@@ -74,9 +74,9 @@ const ProductGrid = ({ product, index, ...rest }) => {
             </p>
             <h5 className="fs-md-7 text-warning mb-0 d-flex align-items-center mb-3">
               {`Gs. ${salePrice ? formattedSalePrice : formattedPrice}`}
-              {salePrice && (
+              {/* {salePrice && (
                 <span className="ms-2 fs-10 text-500">{formattedPrice}</span>
-              )}
+              )} */}
             </h5>
 
             <p className="fs-10 mb-1">

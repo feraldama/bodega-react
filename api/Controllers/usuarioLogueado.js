@@ -10,7 +10,7 @@ async function getUser(req, res) {
     const soapRequestBody = `
 <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
     <Body>
-        <PAlmacenWS.USUARIOLOGUEADO xmlns="Winners"/>
+        <PAlmacenWS.USUARIOLOGUEADO xmlns="Decorpar"/>
     </Body>
 </Envelope>
 `;
@@ -18,7 +18,10 @@ async function getUser(req, res) {
     // Configurar los headers
     const headers = new Headers();
     headers.append("Content-Type", "text/xml; charset=utf-8");
-    headers.append("SOAPAction", '"Winnersaction/APALMACENWS.USUARIOLOGUEADO"');
+    headers.append(
+      "SOAPAction",
+      '"Decorparaction/APALMACENWS.USUARIOLOGUEADO"'
+    );
     headers.append("Accept-Language", "es-419,es;q=0.9,en;q=0.8");
     headers.append(
       "Cookie",
@@ -35,7 +38,7 @@ async function getUser(req, res) {
 
     // Hacer la petición fetch
     const response = await fetch(
-      "http://192.168.0.126:8080/WinnersTemple/servlet/com.winners.apalmacenws",
+      "http://192.168.0.126:8080/DecorparPintureria/servlet/com.decorpar.apalmacenws",
       requestOptions
     );
 

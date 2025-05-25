@@ -19,7 +19,7 @@ const CartItem = ({ product, index }) => {
     customersState: { selectedCustomer }
   } = useContext(CustomerContext);
 
-  const [useSalePrice, setUseSalePrice] = useState(false);
+  const [useSalePrice, setUseSalePrice] = useState(true);
   const [editablePrice, setEditablePrice] = useState(salePrice);
   const [isEditingPrice, setIsEditingPrice] = useState(false);
 
@@ -32,9 +32,11 @@ const CartItem = ({ product, index }) => {
     id === 1 || id === 2
       ? editablePrice
       : useSalePrice
-      ? selectedCustomer?.ClienteTipo == 'MI'
+      ? selectedCustomer?.ClienteTipo === 'MI'
         ? price
-        : product.ProductoPrecioVentaMayorista
+        : selectedCustomer?.ClienteTipo === 'MA'
+        ? product.ProductoPrecioVentaMayorista
+        : salePrice
       : salePrice
   );
 
@@ -44,9 +46,11 @@ const CartItem = ({ product, index }) => {
       id === 1 || id === 2
         ? editablePrice
         : useSalePrice
-        ? selectedCustomer?.ClienteTipo == 'MI'
+        ? selectedCustomer?.ClienteTipo === 'MI'
           ? price
-          : product.ProductoPrecioVentaMayorista
+          : selectedCustomer?.ClienteTipo === 'MA'
+          ? product.ProductoPrecioVentaMayorista
+          : salePrice
         : salePrice;
 
     if (combo && quantity >= combo.ComboCantidad) {
@@ -173,9 +177,11 @@ const CartItem = ({ product, index }) => {
       setUseSalePrice(newUseSalePrice);
 
       const basePrice = newUseSalePrice
-        ? selectedCustomer?.ClienteTipo == 'MI'
+        ? selectedCustomer?.ClienteTipo === 'MI'
           ? price
-          : product.ProductoPrecioVentaMayorista
+          : selectedCustomer?.ClienteTipo === 'MA'
+          ? product.ProductoPrecioVentaMayorista
+          : salePrice
         : salePrice;
 
       productsDispatch({
@@ -272,7 +278,7 @@ const CartItem = ({ product, index }) => {
                     handleDecrease={handleDecrease}
                     btnClassName="px-2"
                   />
-                  <Col
+                  {/* <Col
                     md={{ span: 4, order: 1 }}
                     xs={{ order: 0 }}
                     className="d-flex justify-content-end align-items-center"
@@ -289,7 +295,7 @@ const CartItem = ({ product, index }) => {
                         marginLeft: 'auto'
                       }}
                     />
-                  </Col>
+                  </Col> */}
                 </>
               )}
             </div>

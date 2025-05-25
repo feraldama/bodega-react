@@ -4,7 +4,7 @@ import { ProductContext } from 'context/Context';
 import { productData } from 'data/ecommerce/productData';
 import { productReducer } from 'reducers/productReducer';
 import axios from 'axios';
-import product3 from 'assets/img/products/4.jpg';
+import product3 from 'assets/img/products/4.png';
 // import product2 from 'assets/img/products/2.jpg';
 
 const ProductProvider = ({ children }) => {

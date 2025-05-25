@@ -278,7 +278,7 @@ const PaymentModal = ({
             {/* Voucher */}
             <Row className="gx-card mx-0">
               <Col xs={6} md={6} className="py-2 text-end text-900">
-                Voucher:
+                Descuento:
               </Col>
               <Col xs={6} md={6} className="text-end py-2 text-nowrap px-x1">
                 <Form.Control
